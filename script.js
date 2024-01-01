@@ -1,44 +1,38 @@
-// all the dom elements are selected
-const addTodoInputElement = document.getElementById("addTodoInputField");
-const addTodoButton = document.getElementById("addTodoButton");
-const allTodoContainer = document.getElementById("todosContainer");
+import { sanitizaInput, clearInputField } from "./utility.js";
 
-// global variables
-let allTodosArray = [];
+const $todoInput = document.getElementById("input-field");
+const $addButton = document.getElementById("add-button");
+const $todoList = document.getElementById("todo-list");
 
-// input data sanitization by using removing any tags
-const dataSanitization = (value) => {
-    return value.replace(/(<([^>]+)>)/gi, "");
-};
+let todos = [];
 
-// get the todo title from the input element
 const addTodoHandler = () => {
-    let todoTitle = addTodoInputElement.value;
+    let todoTitle = sanitizaInput($todoInput.value).trim();
     if (!todoTitle.length) {
         alert("Please enter a valid text");
         return;
     }
 
-    allTodosArray.unshift({
+    todos.unshift({
         id: new Date().getTime(),
-        title: dataSanitization(todoTitle),
+        title: todoTitle,
     });
+    clearInputField($todoInput);
 
-    renderTodoArray(allTodosArray);
+    renderTodos(todos);
 };
 
-// render functions to update the dom
-const renderTodoArray = (toBeRenderedArray) => {
-    allTodoContainer.innerHTML = "";
+const createTodoElement = (todo) => {
+    const $todo = document.createElement("li");
+    $todo.innerHTML = `<p>${todo.title}</p>`;
 
-    const finalRenderedTodos = toBeRenderedArray
-        .map((todo) => {
-            return `<li>${todo.title}</li>`;
-        })
-        .join("");
-
-    allTodoContainer.innerHTML = finalRenderedTodos;
+    return $todo.outerHTML;
 };
 
-// global event listeners
-addTodoButton.addEventListener("click", addTodoHandler);
+const renderTodos = (todos) => {
+    $todoList.innerHTML = "";
+
+    $todoList.innerHTML = todos.map((todo) => createTodoElement(todo)).join("");
+};
+
+$addButton.addEventListener("click", addTodoHandler);
