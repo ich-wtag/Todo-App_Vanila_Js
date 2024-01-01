@@ -1,4 +1,10 @@
+ol li{
+    margin: 20px 0;
+}
 ol li p {
     display: inline-block;
-    margin-right: 10px;
+}
+
+ol li button{
+    margin-left: 10px;
 }
