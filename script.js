@@ -1,13 +1,14 @@
-import { sanitizaInput, clearInputField } from "./utility.js";
-
-const $todoInput = document.getElementById("input-field");
-const $addButton = document.getElementById("add-button");
-const $todoList = document.getElementById("todo-list");
+import { $addButton, $todoInput, $todoList } from "./element.js";
+import {
+    sanitizeInput,
+    clearInputField,
+    eventListenerHandler,
+} from "./utility.js";
 
 let todos = [];
 
 const addTodoHandler = () => {
-    let todoTitle = sanitizaInput($todoInput.value).trim();
+    const todoTitle = sanitizeInput($todoInput.value).trim();
     if (!todoTitle.length) {
         alert("Please enter a valid text");
         return;
@@ -35,4 +36,4 @@ const renderTodos = (todos) => {
     $todoList.innerHTML = todos.map((todo) => createTodoElement(todo)).join("");
 };
 
-$addButton.addEventListener("click", addTodoHandler);
+eventListenerHandler($addButton, "click", addTodoHandler);
