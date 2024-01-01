@@ -1,9 +1,5 @@
 import { $addButton, $todoInput, $todoList } from "./element.js";
-import {
-    sanitizeInput,
-    clearInputField,
-    eventListenerHandler,
-} from "./utility.js";
+import { sanitizeInput, clearInputField } from "./utility.js";
 
 let todos = [];
 
@@ -24,7 +20,7 @@ const addTodoHandler = () => {
 };
 
 const deleteTodoHandler = (todoId) => {
-    todos = [...todos].filter((todo) => todo.id !== todoId);
+    todos = todos.filter((todo) => todo.id !== todoId);
 
     renderTodos(todos);
 };
@@ -34,9 +30,7 @@ const createTodoElement = (todo) => {
     const $deleteButton = document.createElement("button");
     $deleteButton.innerText = "Delete";
 
-    eventListenerHandler($deleteButton, "click", () =>
-        deleteTodoHandler(todo.id)
-    );
+    $deleteButton.addEventListener("click", () => deleteTodoHandler(todo.id));
 
     $todo.innerHTML = `<p>${todo.title}</p>`;
     $todo.appendChild($deleteButton);
@@ -51,4 +45,4 @@ const renderTodos = (todos) => {
     });
 };
 
-eventListenerHandler($addButton, "click", addTodoHandler);
+$addButton.addEventListener("click", addTodoHandler);
