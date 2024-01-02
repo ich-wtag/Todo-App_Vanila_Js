@@ -5,3 +5,7 @@ export const sanitizeInput = (value) => {
 export const clearInputField = (inputElement) => {
     inputElement.value = "";
 };
+
+export const displayPropertySetter = (element, property) => {
+    element.style.display = property;
+};
