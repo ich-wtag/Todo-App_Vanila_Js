@@ -12,7 +12,7 @@ const addTodoHandler = () => {
     const todoTitle = sanitizeInput($todoInput.value).trim();
     if (!todoTitle.length) {
         showErrorMessage(
-            "You can not add an todo item without any title. Please add a title"
+            "You can not add a todo item without any title. Please add a title"
         );
         return;
     }
@@ -49,7 +49,7 @@ const editTodoHandler = (
     } else {
         if (!inputElement.value) {
             showErrorMessage(
-                "You can not update an todo without any title. Please add a title"
+                "You can not update a todo without any title. Please add a title"
             );
 
             return;
@@ -80,6 +80,37 @@ const cancelEditingTodoHandler = (
 
     editButton.innerText = "Edit";
     todo.isEditing = false;
+    todo.isComplete = false;
+};
+
+const markDoneTodoHandler = (
+    e,
+    paragraphElement,
+    editButton,
+    inputElement,
+    cancelButton,
+    todo
+) => {
+    if (!inputElement.value) {
+        showErrorMessage(
+            "You can not make done a todo without any title. Please add a title"
+        );
+        return;
+    }
+    if (paragraphElement.classList.contains("hide")) {
+        paragraphElement.innerText = inputElement.value;
+        paragraphElement.classList.remove("hide");
+        $errorMessageElement.classList.add("hide");
+    }
+
+    paragraphElement.classList.add("done-todo");
+    e.target.classList.add("hide");
+    editButton.classList.add("hide");
+    inputElement.classList.add("hide");
+    cancelButton.classList.add("hide");
+
+    todo.title = inputElement.value;
+    todo.isComplete = true;
 };
 
 const createTodoElement = (todo) => {
@@ -89,6 +120,7 @@ const createTodoElement = (todo) => {
     const $editButton = document.createElement("button");
     const $inputElement = document.createElement("input");
     const $cancelButton = document.createElement("button");
+    const $doneButton = document.createElement("button");
 
     $paragraphElement.innerText = todo.title;
     $inputElement.value = todo.title;
@@ -96,6 +128,7 @@ const createTodoElement = (todo) => {
     $deleteButton.innerText = "Delete";
     $editButton.innerText = "Edit";
     $cancelButton.textContent = "Cancel";
+    $doneButton.textContent = "Done";
 
     $cancelButton.classList.add("hide");
     $inputElement.classList.add("hide");
@@ -122,11 +155,23 @@ const createTodoElement = (todo) => {
         )
     );
 
+    $doneButton.addEventListener("click", (e) =>
+        markDoneTodoHandler(
+            e,
+            $paragraphElement,
+            $editButton,
+            $inputElement,
+            $cancelButton,
+            todo
+        )
+    );
+
     $todo.append(
         $paragraphElement,
         $inputElement,
         $deleteButton,
         $editButton,
+        $doneButton,
         $cancelButton
     );
 
