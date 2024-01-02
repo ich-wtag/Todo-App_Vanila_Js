@@ -5,7 +5,3 @@ export const sanitizeInput = (value) => {
 export const clearInputField = (inputElement) => {
     inputElement.value = "";
 };
-
-export const eventListenerHandler = (domElement, event, handlerFunction) => {
-    domElement.addEventListener(`${event}`, handlerFunction);
-};
