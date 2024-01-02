@@ -8,3 +8,12 @@ ol li p {
 ol li button{
     margin-left: 10px;
 }
+
+.hide{
+    display: none;
+}
+
+.error-message{
+    color: red;
+    font-weight: 600;
+}

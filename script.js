@@ -1,19 +1,23 @@
-import { $addButton, $todoInput, $todoList } from "./element.js";
 import {
-    sanitizeInput,
-    clearInputField,
-    displayPropertySetter,
-} from "./utility.js";
+    $addButton,
+    $todoInput,
+    $todoList,
+    $errorMessageElement,
+} from "./element.js";
+import { sanitizeInput, clearInputField, showErrorMessage } from "./utility.js";
 
 let todos = [];
 
 const addTodoHandler = () => {
     const todoTitle = sanitizeInput($todoInput.value).trim();
     if (!todoTitle.length) {
-        alert("Please enter a valid text");
+        showErrorMessage(
+            "You can not add an todo item without any title. Please add a title"
+        );
         return;
     }
 
+    $errorMessageElement.classList.add("hide");
     todos.unshift({
         id: new Date().getTime(),
         title: todoTitle,
@@ -41,28 +45,26 @@ const editTodoHandler = (
     if (!todo.isEditing) {
         $buttonElement.innerText = "Update";
         inputElement.value = todo.title;
-
-        displayPropertySetter(inputElement, "inline-block");
-        displayPropertySetter(cancelButton, "inline-block");
-        displayPropertySetter(paragraphElement, "none");
-
         todo.isEditing = true;
     } else {
         if (!inputElement.value) {
-            alert("You can not update an empty title.");
+            showErrorMessage(
+                "You can not update an todo without any title. Please add a title"
+            );
+
             return;
         }
 
+        $errorMessageElement.classList.add("hide");
         $buttonElement.innerText = "Edit";
         paragraphElement.textContent = inputElement.value;
-
-        displayPropertySetter(inputElement, "none");
-        displayPropertySetter(cancelButton, "none");
-        displayPropertySetter(paragraphElement, "inline-block");
-
         todo.title = inputElement.value;
         todo.isEditing = false;
     }
+
+    inputElement.classList.toggle("hide");
+    cancelButton.classList.toggle("hide");
+    paragraphElement.classList.toggle("hide");
 };
 
 const cancelEditingTodoHandler = (
@@ -72,9 +74,9 @@ const cancelEditingTodoHandler = (
     editButton,
     todo
 ) => {
-    displayPropertySetter(inputElement, "none");
-    displayPropertySetter(e.target, "none");
-    displayPropertySetter(paragraphElement, "inline-block");
+    inputElement.classList.toggle("hide");
+    e.target.classList.toggle("hide");
+    paragraphElement.classList.toggle("hide");
 
     editButton.innerText = "Edit";
     todo.isEditing = false;
@@ -95,8 +97,8 @@ const createTodoElement = (todo) => {
     $editButton.innerText = "Edit";
     $cancelButton.textContent = "Cancel";
 
-    displayPropertySetter($cancelButton, "none");
-    displayPropertySetter($inputElement, "none");
+    $cancelButton.classList.add("hide");
+    $inputElement.classList.add("hide");
 
     $deleteButton.addEventListener("click", () => deleteTodoHandler(todo.id));
 
