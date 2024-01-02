@@ -3,6 +3,8 @@ import {
     $todoInput,
     $todoList,
     $errorMessageElement,
+    $searchInput,
+    $searchButton,
 } from "./element.js";
 import { sanitizeInput, clearInputField, showErrorMessage } from "./utility.js";
 
@@ -22,6 +24,7 @@ const addTodoHandler = () => {
         id: new Date().getTime(),
         title: todoTitle,
         isEditing: false,
+        isCompleted: false,
     });
     clearInputField($todoInput);
 
@@ -80,7 +83,6 @@ const cancelEditingTodoHandler = (
 
     editButton.innerText = "Edit";
     todo.isEditing = false;
-    todo.isComplete = false;
 };
 
 const markDoneTodoHandler = (
@@ -110,7 +112,7 @@ const markDoneTodoHandler = (
     cancelButton.classList.add("hide");
 
     todo.title = inputElement.value;
-    todo.isComplete = true;
+    todo.isCompleted = true;
 };
 
 const createTodoElement = (todo) => {
@@ -178,6 +180,18 @@ const createTodoElement = (todo) => {
     return $todo;
 };
 
+const searchHandler = () => {
+    let searchedArray = todos.filter((todo) =>
+        todo.title.includes($searchInput.value)
+    );
+
+    if (!$searchInput.value) {
+        renderTodos(todos);
+    }
+
+    renderTodos(searchedArray);
+};
+
 const renderTodos = (todos) => {
     $todoList.innerHTML = "";
     todos.forEach((todo) => {
@@ -186,3 +200,4 @@ const renderTodos = (todos) => {
 };
 
 $addButton.addEventListener("click", addTodoHandler);
+$searchButton.addEventListener("click", searchHandler);

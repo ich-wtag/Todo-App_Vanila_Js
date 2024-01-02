@@ -21,3 +21,7 @@ ol li button{
 .done-todo{
     text-decoration: line-through;
 }
+
+.search-container{
+    margin-top: 20px;
+}
