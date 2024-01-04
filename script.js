@@ -5,10 +5,18 @@ import {
     $errorMessageElement,
     $searchInput,
     $searchButton,
+    $allTodoButton,
+    $completeTodoButton,
+    $incompleteTodoButton,
 } from "./element.js";
 import { sanitizeInput, clearInputField, showErrorMessage } from "./utility.js";
 
 let todos = [];
+let searchedArray = [];
+let filteredArray = [];
+
+let isSearched = false;
+let filterValue = "all";
 
 const addTodoHandler = () => {
     const todoTitle = sanitizeInput($todoInput.value).trim();
@@ -112,14 +120,41 @@ const markDoneTodoHandler = (
 
     todo.title = inputElement.value;
     todo.isCompleted = true;
+    filterTodosHandler(filterValue);
 };
 
 const searchHandler = () => {
-    let searchedArray = todos.filter((todo) =>
-        todo.title.includes($searchInput.value)
-    );
+    let searchedValue = $searchInput.value.trim();
+    isSearched = searchedValue.length ? true : false;
 
-    renderTodos(searchedArray);
+    searchedArray = todos.filter((todo) => todo.title.includes(searchedValue));
+
+    filterTodosHandler(filterValue);
+};
+
+const filterTodosHandler = (toFilterValue) => {
+    let tobeFilteredArray = isSearched ? searchedArray : todos;
+
+    switch (toFilterValue) {
+        case "incomplete":
+            filteredArray = tobeFilteredArray.filter(
+                (todo) => !todo.isCompleted
+            );
+            break;
+
+        case "complete":
+            filteredArray = tobeFilteredArray.filter(
+                (todo) => todo.isCompleted
+            );
+            break;
+
+        default:
+            filteredArray = [...tobeFilteredArray];
+            break;
+    }
+
+    filterValue = toFilterValue;
+    renderTodos(filteredArray);
 };
 
 const createTodoElement = (todo) => {
@@ -202,3 +237,10 @@ const renderTodos = (todos) => {
 
 $addButton.addEventListener("click", addTodoHandler);
 $searchButton.addEventListener("click", searchHandler);
+$allTodoButton.addEventListener("click", () => filterTodosHandler("all"));
+$incompleteTodoButton.addEventListener("click", () =>
+    filterTodosHandler("incomplete")
+);
+$completeTodoButton.addEventListener("click", () =>
+    filterTodosHandler("complete")
+);
