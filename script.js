@@ -1,18 +1,27 @@
-import { $addButton, $todoInput, $todoList } from "./element.js";
-import { sanitizeInput, clearInputField } from "./utility.js";
+import {
+    $addButton,
+    $todoInput,
+    $todoList,
+    $errorMessageElement,
+} from "./element.js";
+import { sanitizeInput, clearInputField, showErrorMessage } from "./utility.js";
 
 let todos = [];
 
 const addTodoHandler = () => {
     const todoTitle = sanitizeInput($todoInput.value).trim();
     if (!todoTitle.length) {
-        alert("Please enter a valid text");
+        showErrorMessage(
+            "You can not add an todo item without any title. Please add a title"
+        );
         return;
     }
 
+    $errorMessageElement.classList.add("hide");
     todos.unshift({
         id: new Date().getTime(),
         title: todoTitle,
+        isEditing: false,
     });
     clearInputField($todoInput);
 
@@ -21,19 +30,104 @@ const addTodoHandler = () => {
 
 const deleteTodoHandler = (todoId) => {
     todos = todos.filter((todo) => todo.id !== todoId);
-
     renderTodos(todos);
+};
+
+const editTodoHandler = (
+    e,
+    inputElement,
+    paragraphElement,
+    cancelButton,
+    todo
+) => {
+    const $buttonElement = e.target;
+
+    if (!todo.isEditing) {
+        $buttonElement.innerText = "Update";
+        inputElement.value = todo.title;
+        todo.isEditing = true;
+    } else if (todo.isEditing && !inputElement.value) {
+        showErrorMessage(
+            "You can not update an todo without any title. Please add a title"
+        );
+
+        return;
+    } else {
+        $errorMessageElement.classList.add("hide");
+        $buttonElement.innerText = "Edit";
+        paragraphElement.textContent = inputElement.value;
+        todo.title = inputElement.value;
+        todo.isEditing = false;
+    }
+
+    inputElement.classList.toggle("hide");
+    cancelButton.classList.toggle("hide");
+    paragraphElement.classList.toggle("hide");
+};
+
+const cancelEditingTodoHandler = (
+    e,
+    inputElement,
+    paragraphElement,
+    editButton,
+    todo
+) => {
+    inputElement.classList.add("hide");
+    e.target.classList.add("hide");
+    paragraphElement.classList.remove("hide");
+    $errorMessageElement.classList.add("hide");
+
+    editButton.innerText = "Edit";
+    todo.isEditing = false;
 };
 
 const createTodoElement = (todo) => {
     const $todo = document.createElement("li");
+    const $paragraphElement = document.createElement("p");
     const $deleteButton = document.createElement("button");
+    const $editButton = document.createElement("button");
+    const $inputElement = document.createElement("input");
+    const $cancelButton = document.createElement("button");
+
+    $paragraphElement.innerText = todo.title;
+    $inputElement.value = todo.title;
+
     $deleteButton.innerText = "Delete";
+    $editButton.innerText = "Edit";
+    $cancelButton.textContent = "Cancel";
+
+    $cancelButton.classList.add("hide");
+    $inputElement.classList.add("hide");
 
     $deleteButton.addEventListener("click", () => deleteTodoHandler(todo.id));
 
-    $todo.innerHTML = `<p>${todo.title}</p>`;
-    $todo.appendChild($deleteButton);
+    $editButton.addEventListener("click", (e) =>
+        editTodoHandler(
+            e,
+            $inputElement,
+            $paragraphElement,
+            $cancelButton,
+            todo
+        )
+    );
+
+    $cancelButton.addEventListener("click", (e) =>
+        cancelEditingTodoHandler(
+            e,
+            $inputElement,
+            $paragraphElement,
+            $editButton,
+            todo
+        )
+    );
+
+    $todo.append(
+        $paragraphElement,
+        $inputElement,
+        $deleteButton,
+        $editButton,
+        $cancelButton
+    );
 
     return $todo;
 };
