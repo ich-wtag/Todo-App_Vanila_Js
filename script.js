@@ -134,6 +134,12 @@ const createTodoElement = (todo) => {
     $cancelButton.classList.add("hide");
     $inputElement.classList.add("hide");
 
+    if (todo.isCompleted) {
+        $paragraphElement.classList.add("done-todo");
+        $doneButton.classList.add("hide");
+        $editButton.classList.add("hide");
+    }
+
     $deleteButton.addEventListener("click", () => deleteTodoHandler(todo.id));
 
     $editButton.addEventListener("click", (e) =>
