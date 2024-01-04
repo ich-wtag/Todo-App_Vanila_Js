@@ -114,6 +114,14 @@ const markDoneTodoHandler = (
     todo.isCompleted = true;
 };
 
+const searchHandler = () => {
+    let searchedArray = todos.filter((todo) =>
+        todo.title.includes($searchInput.value)
+    );
+
+    renderTodos(searchedArray);
+};
+
 const createTodoElement = (todo) => {
     const $todo = document.createElement("li");
     const $paragraphElement = document.createElement("p");
@@ -183,18 +191,6 @@ const createTodoElement = (todo) => {
     );
 
     return $todo;
-};
-
-const searchHandler = () => {
-    let searchedArray = todos.filter((todo) =>
-        todo.title.includes($searchInput.value)
-    );
-
-    if (!$searchInput.value) {
-        renderTodos(todos);
-    }
-
-    renderTodos(searchedArray);
 };
 
 const renderTodos = (todos) => {
