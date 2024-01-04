@@ -46,15 +46,13 @@ const editTodoHandler = (
         $buttonElement.innerText = "Update";
         inputElement.value = todo.title;
         todo.isEditing = true;
+    } else if (todo.isEditing && !inputElement.value) {
+        showErrorMessage(
+            "You can not update an todo without any title. Please add a title"
+        );
+
+        return;
     } else {
-        if (!inputElement.value) {
-            showErrorMessage(
-                "You can not update an todo without any title. Please add a title"
-            );
-
-            return;
-        }
-
         $errorMessageElement.classList.add("hide");
         $buttonElement.innerText = "Edit";
         paragraphElement.textContent = inputElement.value;
@@ -74,9 +72,10 @@ const cancelEditingTodoHandler = (
     editButton,
     todo
 ) => {
-    inputElement.classList.toggle("hide");
-    e.target.classList.toggle("hide");
-    paragraphElement.classList.toggle("hide");
+    inputElement.classList.add("hide");
+    e.target.classList.add("hide");
+    paragraphElement.classList.remove("hide");
+    $errorMessageElement.classList.add("hide");
 
     editButton.innerText = "Edit";
     todo.isEditing = false;
