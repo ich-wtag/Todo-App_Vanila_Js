@@ -5,9 +5,6 @@ import {
     $errorMessageElement,
     $searchInput,
     $searchButton,
-    $allTodoButton,
-    $completeTodoButton,
-    $incompleteTodoButton,
 } from "./element.js";
 import { sanitizeInput, clearInputField, showErrorMessage } from "./utility.js";
 
@@ -246,3 +243,4 @@ $incompleteTodoButton.addEventListener("click", () =>
 $completeTodoButton.addEventListener("click", () =>
     filterTodosHandler("complete")
 );
+$filterButtonContainer.addEventListener("click", (e) => filterTodosHandler(e));
