@@ -9,6 +9,7 @@ import {
 import { sanitizeInput, clearInputField, showErrorMessage } from "./utility.js";
 
 let todos = [];
+let searchedArray = [];
 
 const addTodoHandler = () => {
     const todoTitle = sanitizeInput($todoInput.value).trim();
@@ -112,6 +113,16 @@ const markDoneTodoHandler = (
 
     todo.title = sanitizeInput(inputElement.value).trim();
     todo.isComplete = true;
+};
+
+const searchHandler = () => {
+    let searchedValue = $searchInput.value.toLowerCase().trim();
+
+    searchedArray = todos.filter((todo) =>
+        todo.title.toLowerCase().includes(searchedValue)
+    );
+
+    renderTodos(searchedArray);
 };
 
 const createTodoElement = (todo) => {
