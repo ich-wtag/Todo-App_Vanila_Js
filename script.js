@@ -57,7 +57,7 @@ const editTodoHandler = (
         $buttonElement.innerText = "Update";
         inputElement.value = todo.title;
         todo.isEditing = true;
-    } else if (todo.isEditing && !inputElement.value) {
+    } else if (todo.isEditing && !inputElement.value.trim()) {
         showErrorMessage(
             "You can not update an todo without any title. Please add a title"
         );
@@ -66,8 +66,8 @@ const editTodoHandler = (
     } else {
         $errorMessageElement.classList.add("hide");
         $buttonElement.innerText = "Edit";
-        paragraphElement.textContent = inputElement.value;
-        todo.title = inputElement.value;
+        paragraphElement.textContent = sanitizeInput(inputElement.value).trim();
+        todo.title = sanitizeInput(inputElement.value).trim();
         todo.isEditing = false;
     }
 
@@ -107,7 +107,7 @@ const markDoneTodoHandler = (
         return;
     }
     if (paragraphElement.classList.contains("hide")) {
-        paragraphElement.innerText = inputElement.value;
+        paragraphElement.innerText = sanitizeInput(inputElement.value).trim();
         paragraphElement.classList.remove("hide");
         $errorMessageElement.classList.add("hide");
     }
@@ -155,6 +155,8 @@ const filterTodosHandler = (toFilterValue) => {
 
     filterValue = toFilterValue;
     renderTodos(filteredArray);
+    todo.title = sanitizeInput(inputElement.value).trim();
+    todo.isComplete = true;
 };
 
 const createTodoElement = (todo) => {
