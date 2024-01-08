@@ -90,7 +90,7 @@ const markDoneTodoHandler = (
     cancelButton,
     todo
 ) => {
-    if (!inputElement.value) {
+    if (!inputElement.value.trim()) {
         showErrorMessage(
             "You can not make done a todo without any title. Please add a title"
         );
