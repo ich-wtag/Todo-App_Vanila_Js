@@ -17,3 +17,7 @@ ol li button{
     color: red;
     font-weight: 600;
 }
+
+.done-todo{
+    text-decoration: line-through;
+}
