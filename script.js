@@ -92,7 +92,7 @@ const markDoneTodoHandler = (
     cancelButton,
     todo
 ) => {
-    if (!inputElement.value) {
+    if (!inputElement.value.trim()) {
         showErrorMessage(
             "You can not make done a todo without any title. Please add a title"
         );
@@ -116,7 +116,7 @@ const markDoneTodoHandler = (
 
 const searchHandler = () => {
     let searchedArray = todos.filter((todo) =>
-        todo.title.includes($searchInput.value)
+        todo.title.includes($searchInput.value.toLowerCase().trim())
     );
 
     renderTodos(searchedArray);
