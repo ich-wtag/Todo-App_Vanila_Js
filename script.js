@@ -5,6 +5,9 @@ import {
     $errorMessageElement,
     $searchInput,
     $searchButton,
+    $allTodoButton,
+    $completeTodoButton,
+    $incompleteTodoButton,
 } from "./element.js";
 import { sanitizeInput, clearInputField, showErrorMessage } from "./utility.js";
 
@@ -33,12 +36,12 @@ const addTodoHandler = () => {
     });
     clearInputField($todoInput);
 
-    renderTodos(todos);
+    filterTodosHandler(filterValue);
 };
 
 const deleteTodoHandler = (todoId) => {
     todos = todos.filter((todo) => todo.id !== todoId);
-    renderTodos(todos);
+    filterTodosHandler(filterValue);
 };
 
 const editTodoHandler = (
@@ -152,8 +155,6 @@ const filterTodosHandler = (toFilterValue) => {
 
     filterValue = toFilterValue;
     renderTodos(filteredArray);
-    todo.title = sanitizeInput(inputElement.value).trim();
-    todo.isComplete = true;
 };
 
 const createTodoElement = (todo) => {
@@ -243,4 +244,3 @@ $incompleteTodoButton.addEventListener("click", () =>
 $completeTodoButton.addEventListener("click", () =>
     filterTodosHandler("complete")
 );
-$filterButtonContainer.addEventListener("click", (e) => filterTodosHandler(e));
