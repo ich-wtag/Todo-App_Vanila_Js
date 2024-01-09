@@ -40,15 +40,14 @@ const addTodoHandler = () => {
     });
     clearInputField($todoInput);
 
-    $searchInput.value = "";
-
+    clearInputField($searchInput);
     filterTodosHandler(filterValue);
 };
 
 const deleteTodoHandler = (todoId) => {
     todos = todos.filter((todo) => todo.id !== todoId);
+    clearInputField($searchInput);
     filterTodosHandler(filterValue);
-    $searchInput.value = "";
 };
 
 const editTodoHandler = (
@@ -82,7 +81,7 @@ const editTodoHandler = (
     cancelButton.classList.toggle("hide");
     paragraphElement.classList.toggle("hide");
 
-    $searchInput.value = "";
+    clearInputField($searchInput);
 };
 
 const cancelEditingTodoHandler = (
@@ -130,20 +129,19 @@ const markDoneTodoHandler = (
     todo.title = sanitizeInput(inputElement.value).trim();
     todo.isCompleted = true;
     filterTodosHandler(filterValue);
-    $searchInput.value = "";
 };
 
 const searchHandler = () => {
     const searchedValue = $searchInput.value.toLowerCase().trim();
-    const searchedArray = todos.filter((todo) =>
+    searchedArray = todos.filter((todo) =>
         todo.title.toLowerCase().includes(searchedValue)
     );
 
-    isSearched = searchedValue.length ? true : false;
     filterTodosHandler(filterValue);
 };
 
 const filterTodosHandler = (toFilterValue) => {
+    isSearched = $searchInput.value.trim().length ? true : false;
     let tobeFilteredArray = isSearched ? searchedArray : todos;
 
     switch (toFilterValue) {
