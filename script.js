@@ -9,7 +9,12 @@ import {
     $incompleteTodoButton,
     $loadMoreButton,
 } from "./element.js";
-import { sanitizeInput, clearInputField, showErrorMessage } from "./utility.js";
+import {
+    sanitizeInput,
+    clearInputField,
+    showErrorMessage,
+    showCompletedTodo,
+} from "./utility.js";
 
 let todos = [];
 let searchedArray = [];
@@ -17,8 +22,8 @@ let filteredArray = [];
 
 let isSearched = false;
 let filterValue = "all";
-let endIndex = 9;
 
+let endIndex = 9;
 const todosNeedToLoad = 6;
 let currentPage = 1;
 let totalPage = 1;
@@ -40,14 +45,13 @@ const addTodoHandler = () => {
         isCompleted: false,
     });
     clearInputField($todoInput);
-    clearInputField($searchInput);
 
+    clearInputField($searchInput);
     filterTodosHandler(filterValue);
 };
 
 const deleteTodoHandler = (todoId) => {
     todos = todos.filter((todo) => todo.id !== todoId);
-
     clearInputField($searchInput);
     filterTodosHandler(filterValue);
 };
@@ -79,10 +83,11 @@ const editTodoHandler = (
         todo.isEditing = false;
     }
 
-    clearInputField($searchInput);
     inputElement.classList.toggle("hide");
     cancelButton.classList.toggle("hide");
     paragraphElement.classList.toggle("hide");
+
+    clearInputField($searchInput);
 };
 
 const cancelEditingTodoHandler = (
@@ -99,7 +104,6 @@ const cancelEditingTodoHandler = (
 
     editButton.innerText = "Edit";
     todo.isEditing = false;
-    clearInputField($searchInput);
 };
 
 const markDoneTodoHandler = (
