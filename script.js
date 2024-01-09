@@ -4,7 +4,6 @@ import {
     $todoList,
     $errorMessageElement,
     $searchInput,
-    $searchButton,
     $allTodoButton,
     $completeTodoButton,
     $incompleteTodoButton,
@@ -19,7 +18,8 @@ let filteredArray = [];
 let isSearched = false;
 let filterValue = "all";
 let endIndex = 9;
-let todosNeedToLoad = 6;
+
+const todosNeedToLoad = 6;
 let currentPage = 1;
 let totalPage = 1;
 
@@ -40,12 +40,15 @@ const addTodoHandler = () => {
         isCompleted: false,
     });
     clearInputField($todoInput);
+    clearInputField($searchInput);
 
     filterTodosHandler(filterValue);
 };
 
 const deleteTodoHandler = (todoId) => {
     todos = todos.filter((todo) => todo.id !== todoId);
+
+    clearInputField($searchInput);
     filterTodosHandler(filterValue);
 };
 
@@ -76,6 +79,7 @@ const editTodoHandler = (
         todo.isEditing = false;
     }
 
+    clearInputField($searchInput);
     inputElement.classList.toggle("hide");
     cancelButton.classList.toggle("hide");
     paragraphElement.classList.toggle("hide");
@@ -95,6 +99,7 @@ const cancelEditingTodoHandler = (
 
     editButton.innerText = "Edit";
     todo.isEditing = false;
+    clearInputField($searchInput);
 };
 
 const markDoneTodoHandler = (
@@ -112,16 +117,16 @@ const markDoneTodoHandler = (
         return;
     }
     if (paragraphElement.classList.contains("hide")) {
-        paragraphElement.innerText = inputElement.value;
+        paragraphElement.innerText = sanitizeInput(inputElement.value).trim();
         paragraphElement.classList.remove("hide");
         $errorMessageElement.classList.add("hide");
     }
 
-    paragraphElement.classList.add("done-todo");
-    e.target.classList.add("hide");
-    editButton.classList.add("hide");
     inputElement.classList.add("hide");
     cancelButton.classList.add("hide");
+
+    showCompletedTodo(paragraphElement, editButton, e.target);
+    clearInputField($searchInput);
 
     todo.title = sanitizeInput(inputElement.value).trim();
     todo.isCompleted = true;
@@ -129,7 +134,7 @@ const markDoneTodoHandler = (
 };
 
 const searchHandler = () => {
-    let searchedValue = $searchInput.value.toLowerCase().trim();
+    const searchedValue = $searchInput.value.toLowerCase().trim();
 
     searchedArray = todos.filter((todo) =>
         todo.title.toLowerCase().includes(searchedValue)
@@ -139,6 +144,7 @@ const searchHandler = () => {
 };
 
 const filterTodosHandler = (toFilterValue) => {
+    isSearched = $searchInput.value.trim().length ? true : false;
     let tobeFilteredArray = isSearched ? searchedArray : todos;
 
     switch (toFilterValue) {
@@ -160,7 +166,7 @@ const filterTodosHandler = (toFilterValue) => {
     }
 
     filterValue = toFilterValue;
-    renderTodos(filteredArray);
+    renderTodos();
 };
 
 const paginationHandler = () => {
@@ -171,7 +177,7 @@ const paginationHandler = () => {
         currentPage = 1;
         endIndex = 9;
     }
-    renderTodos();
+    filterTodosHandler(filterValue);
 };
 
 const getPaginatedArray = () => {
@@ -185,6 +191,7 @@ const getPaginatedArray = () => {
     }
     $loadMoreButton.textContent =
         currentPage < totalPage ? "Load More" : "Show Less";
+
     return filteredArray?.slice(startIndex, endIndex);
 };
 
@@ -209,9 +216,7 @@ const createTodoElement = (todo) => {
     $inputElement.classList.add("hide");
 
     if (todo.isCompleted) {
-        $paragraphElement.classList.add("done-todo");
-        $doneButton.classList.add("hide");
-        $editButton.classList.add("hide");
+        showCompletedTodo($paragraphElement, $editButton, $doneButton);
     }
 
     $deleteButton.addEventListener("click", () => deleteTodoHandler(todo.id));
@@ -268,7 +273,7 @@ const renderTodos = () => {
 };
 
 $addButton.addEventListener("click", addTodoHandler);
-$searchButton.addEventListener("click", searchHandler);
+$searchInput.addEventListener("input", searchHandler);
 $allTodoButton.addEventListener("click", () => filterTodosHandler("all"));
 $incompleteTodoButton.addEventListener("click", () =>
     filterTodosHandler("incomplete")
