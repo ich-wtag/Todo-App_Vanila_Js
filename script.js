@@ -123,16 +123,17 @@ const markDoneTodoHandler = (
     inputElement.classList.add("hide");
     cancelButton.classList.add("hide");
 
-    todo.title = inputElement.value;
+    todo.title = sanitizeInput(inputElement.value).trim();
     todo.isCompleted = true;
     filterTodosHandler(filterValue);
 };
 
 const searchHandler = () => {
     let searchedValue = $searchInput.value.toLowerCase().trim();
-    isSearched = searchedValue.length ? true : false;
 
-    searchedArray = todos.filter((todo) => todo.title.includes(searchedValue));
+    searchedArray = todos.filter((todo) =>
+        todo.title.toLowerCase().includes(searchedValue)
+    );
 
     filterTodosHandler(filterValue);
 };
