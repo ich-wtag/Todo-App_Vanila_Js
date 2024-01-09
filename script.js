@@ -5,10 +5,14 @@ import {
     $errorMessageElement,
     $searchInput,
 } from "./element.js";
-import { sanitizeInput, clearInputField, showErrorMessage } from "./utility.js";
+import {
+    sanitizeInput,
+    clearInputField,
+    showErrorMessage,
+    showCompletedTodo,
+} from "./utility.js";
 
 let todos = [];
-let searchedArray = [];
 
 const addTodoHandler = () => {
     const todoTitle = sanitizeInput($todoInput.value).trim();
@@ -109,20 +113,19 @@ const markDoneTodoHandler = (
         $errorMessageElement.classList.add("hide");
     }
 
-    paragraphElement.classList.add("done-todo");
-    e.target.classList.add("hide");
-    editButton.classList.add("hide");
     inputElement.classList.add("hide");
     cancelButton.classList.add("hide");
 
-    todo.title = sanitizeInput(inputElement.value).trim();
-    todo.isComplete = true;
+    showCompletedTodo(paragraphElement, editButton, e.target);
     clearInputField($searchInput);
+
+    todo.title = sanitizeInput(inputElement.value).trim();
+    todo.isCompleted = true;
 };
 
 const searchHandler = () => {
     const searchedValue = $searchInput.value.toLowerCase().trim();
-    searchedArray = todos.filter((todo) =>
+    const searchedArray = todos.filter((todo) =>
         todo.title.toLowerCase().includes(searchedValue)
     );
 
@@ -150,9 +153,7 @@ const createTodoElement = (todo) => {
     $inputElement.classList.add("hide");
 
     if (todo.isCompleted) {
-        $paragraphElement.classList.add("done-todo");
-        $doneButton.classList.add("hide");
-        $editButton.classList.add("hide");
+        showCompletedTodo($paragraphElement, $editButton, $doneButton);
     }
 
     $deleteButton.addEventListener("click", () => deleteTodoHandler(todo.id));
