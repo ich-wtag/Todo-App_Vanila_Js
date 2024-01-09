@@ -4,7 +4,6 @@ import {
     $todoList,
     $errorMessageElement,
     $searchInput,
-    $searchButton,
     $allTodoButton,
     $completeTodoButton,
     $incompleteTodoButton,
@@ -37,6 +36,7 @@ const addTodoHandler = () => {
     clearInputField($todoInput);
 
     $searchInput.value = "";
+
     filterTodosHandler(filterValue);
 };
 
@@ -133,7 +133,8 @@ const searchHandler = () => {
     searchedArray = todos.filter((todo) =>
         todo.title.toLowerCase().includes(searchedValue)
     );
-    isSearched = searchedArray.length ? true : false;
+
+    isSearched = searchedValue.length ? true : false;
     filterTodosHandler(filterValue);
 };
 
