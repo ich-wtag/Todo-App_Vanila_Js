@@ -37,7 +37,6 @@ const addTodoHandler = () => {
     clearInputField($todoInput);
 
     $searchInput.value = "";
-    renderTodos(todos);
     filterTodosHandler(filterValue);
 };
 
@@ -134,7 +133,7 @@ const searchHandler = () => {
     searchedArray = todos.filter((todo) =>
         todo.title.toLowerCase().includes(searchedValue)
     );
-
+    isSearched = searchedArray.length ? true : false;
     filterTodosHandler(filterValue);
 };
 
