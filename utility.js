@@ -11,3 +11,9 @@ export const showErrorMessage = (message) => {
     $errorMessageElement.classList.remove("hide");
     $errorMessageElement.innerHTML = message;
 };
+
+export const showCompletedTodo = (paragraphElement, editButton, doneButton) => {
+    paragraphElement.classList.add("done-todo");
+    editButton.classList.add("hide");
+    doneButton.classList.add("hide");
+};
