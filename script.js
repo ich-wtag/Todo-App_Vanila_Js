@@ -28,14 +28,14 @@ const addTodoHandler = () => {
     });
     clearInputField($todoInput);
 
-    $searchInput.value = "";
+    clearInputField($searchInput);
     renderTodos(todos);
 };
 
 const deleteTodoHandler = (todoId) => {
     todos = todos.filter((todo) => todo.id !== todoId);
     renderTodos(todos);
-    $searchInput.value = "";
+    clearInputField($searchInput);
 };
 
 const editTodoHandler = (
@@ -69,7 +69,7 @@ const editTodoHandler = (
     cancelButton.classList.toggle("hide");
     paragraphElement.classList.toggle("hide");
 
-    $searchInput.value = "";
+    clearInputField($searchInput);
 };
 
 const cancelEditingTodoHandler = (
@@ -86,6 +86,7 @@ const cancelEditingTodoHandler = (
 
     editButton.innerText = "Edit";
     todo.isEditing = false;
+    clearInputField($searchInput);
 };
 
 const markDoneTodoHandler = (
@@ -116,7 +117,7 @@ const markDoneTodoHandler = (
 
     todo.title = sanitizeInput(inputElement.value).trim();
     todo.isComplete = true;
-    $searchInput.value = "";
+    clearInputField($searchInput);
 };
 
 const searchHandler = () => {
