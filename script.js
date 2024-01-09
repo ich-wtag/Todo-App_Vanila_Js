@@ -139,7 +139,6 @@ const markDoneTodoHandler = (
 
 const searchHandler = () => {
     const searchedValue = $searchInput.value.toLowerCase().trim();
-
     searchedArray = todos.filter((todo) =>
         todo.title.toLowerCase().includes(searchedValue)
     );
