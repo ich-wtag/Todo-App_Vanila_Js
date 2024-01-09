@@ -4,7 +4,6 @@ import {
     $todoList,
     $errorMessageElement,
     $searchInput,
-    $searchButton,
 } from "./element.js";
 import { sanitizeInput, clearInputField, showErrorMessage } from "./utility.js";
 
@@ -29,12 +28,14 @@ const addTodoHandler = () => {
     });
     clearInputField($todoInput);
 
+    $searchInput.value = "";
     renderTodos(todos);
 };
 
 const deleteTodoHandler = (todoId) => {
     todos = todos.filter((todo) => todo.id !== todoId);
     renderTodos(todos);
+    $searchInput.value = "";
 };
 
 const editTodoHandler = (
@@ -67,6 +68,8 @@ const editTodoHandler = (
     inputElement.classList.toggle("hide");
     cancelButton.classList.toggle("hide");
     paragraphElement.classList.toggle("hide");
+
+    $searchInput.value = "";
 };
 
 const cancelEditingTodoHandler = (
@@ -113,11 +116,11 @@ const markDoneTodoHandler = (
 
     todo.title = sanitizeInput(inputElement.value).trim();
     todo.isComplete = true;
+    $searchInput.value = "";
 };
 
 const searchHandler = () => {
-    let searchedValue = $searchInput.value.toLowerCase().trim();
-
+    const searchedValue = $searchInput.value.toLowerCase().trim();
     searchedArray = todos.filter((todo) =>
         todo.title.toLowerCase().includes(searchedValue)
     );
@@ -204,4 +207,4 @@ const renderTodos = (todos) => {
 };
 
 $addButton.addEventListener("click", addTodoHandler);
-$searchButton.addEventListener("click", searchHandler);
+$searchInput.addEventListener("input", searchHandler);
