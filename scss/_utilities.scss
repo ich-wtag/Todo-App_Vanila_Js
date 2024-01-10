@@ -1,5 +1,6 @@
 .button {
     cursor: pointer;
+    font-weight: inherit;
 
     &:active {
         transform: translateY(0.13rem);
@@ -9,6 +10,7 @@
         @extend .button;
         background: $white-color;
         color: $gray-color;
+        border: none;
     }
 
     &-primary-bg-violet {
