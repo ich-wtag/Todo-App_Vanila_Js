@@ -23,7 +23,7 @@ let todos = [];
 let filteredState = "all";
 
 let endIndex = 9;
-const todosNeedToLoad = 6;
+const todosNeedToBeLoaded = 6;
 let currentPage = 1;
 let totalPage = 1;
 
@@ -154,25 +154,26 @@ const filterTodosHandler = (stateValue, tobeFilteredArray) => {
             return tobeFilteredArray.filter((todo) => todo.isCompleted);
 
         default:
-            filteredArray = [...tobeFilteredArray];
-            break;
+            return [...tobeFilteredArray];
     }
 };
 
 const paginationHandler = () => {
     if (currentPage < totalPage) {
-        endIndex += todosNeedToLoad;
+        endIndex += todosNeedToBeLoaded;
         currentPage++;
     } else {
         currentPage = 1;
         endIndex = 9;
     }
-    filterTodosHandler(filteredState);
+    renderTodos(filteredState);
 };
 
 const getPaginatedArray = (toBePaginatedArray) => {
-    let startIndex = 0;
-    totalPage = Math.round((toBePaginatedArray.length - 1) / todosNeedToLoad);
+    const startIndex = 0;
+    totalPage = Math.round(
+        (toBePaginatedArray.length - 1) / todosNeedToBeLoaded
+    );
 
     if (totalPage > 1) {
         $loadMoreButton.classList.remove("hide");
@@ -260,9 +261,9 @@ const renderTodos = (stateValue) => {
     const arrayFromSearched = searchHandler();
     const arrayTobeRendered = filterTodosHandler(stateValue, arrayFromSearched);
 
-    arrayTobeRendered.forEach((todo) => {
-    let toBeRanderedTodos = getPaginatedArray(todos);
-    toBeRanderedTodos.forEach((todo) => {
+    const paginatedTodos = getPaginatedArray(arrayTobeRendered);
+
+    paginatedTodos.forEach((todo) => {
         $todoList.appendChild(createTodoElement(todo));
     });
 };
