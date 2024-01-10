@@ -16,12 +16,12 @@ import {
     showCompletedTodo,
 } from "./utility.js";
 
+import { INCOMPLETE, COMPLETE } from "./const.js";
+
 let todos = [];
 let searchedArray = [];
-let filteredArray = [];
 
-let isSearched = false;
-let filterValue = "all";
+let filteredState = "all";
 
 let endIndex = 9;
 const todosNeedToLoad = 6;
@@ -47,13 +47,13 @@ const addTodoHandler = () => {
     clearInputField($todoInput);
 
     clearInputField($searchInput);
-    filterTodosHandler(filterValue);
+    filterTodosHandler(filteredState);
 };
 
 const deleteTodoHandler = (todoId) => {
     todos = todos.filter((todo) => todo.id !== todoId);
     clearInputField($searchInput);
-    filterTodosHandler(filterValue);
+    filterTodosHandler(filteredState);
 };
 
 const editTodoHandler = (
@@ -134,7 +134,7 @@ const markDoneTodoHandler = (
 
     todo.title = sanitizeInput(inputElement.value).trim();
     todo.isCompleted = true;
-    filterTodosHandler(filterValue);
+    filterTodosHandler(filteredState);
 };
 
 const searchHandler = () => {
@@ -143,21 +143,23 @@ const searchHandler = () => {
         todo.title.toLowerCase().includes(searchedValue)
     );
 
-    filterTodosHandler(filterValue);
+    filterTodosHandler(filteredState);
 };
 
-const filterTodosHandler = (toFilterValue) => {
-    isSearched = $searchInput.value.trim().length ? true : false;
-    let tobeFilteredArray = isSearched ? searchedArray : todos;
+const filterTodosHandler = (stateValue) => {
+    let filteredArray = [];
+    const isSearched = !!$searchInput.value.trim();
 
-    switch (toFilterValue) {
-        case "incomplete":
+    const tobeFilteredArray = isSearched ? searchedArray : todos;
+
+    switch (stateValue) {
+        case INCOMPLETE:
             filteredArray = tobeFilteredArray.filter(
                 (todo) => !todo.isCompleted
             );
             break;
 
-        case "complete":
+        case COMPLETE:
             filteredArray = tobeFilteredArray.filter(
                 (todo) => todo.isCompleted
             );
@@ -168,8 +170,8 @@ const filterTodosHandler = (toFilterValue) => {
             break;
     }
 
-    filterValue = toFilterValue;
-    renderTodos();
+    filteredState = stateValue;
+    renderTodos(filteredArray);
 };
 
 const paginationHandler = () => {
@@ -180,12 +182,12 @@ const paginationHandler = () => {
         currentPage = 1;
         endIndex = 9;
     }
-    filterTodosHandler(filterValue);
+    filterTodosHandler(filteredState);
 };
 
-const getPaginatedArray = () => {
+const getPaginatedArray = (toBePaginatedArray) => {
     let startIndex = 0;
-    totalPage = Math.round((filteredArray.length - 1) / todosNeedToLoad);
+    totalPage = Math.round((toBePaginatedArray.length - 1) / todosNeedToLoad);
 
     if (totalPage > 1) {
         $loadMoreButton.classList.remove("hide");
@@ -195,7 +197,7 @@ const getPaginatedArray = () => {
     $loadMoreButton.textContent =
         currentPage < totalPage ? "Load More" : "Show Less";
 
-    return filteredArray?.slice(startIndex, endIndex);
+    return toBePaginatedArray?.slice(startIndex, endIndex);
 };
 
 const createTodoElement = (todo) => {
@@ -267,9 +269,9 @@ const createTodoElement = (todo) => {
     return $todo;
 };
 
-const renderTodos = () => {
+const renderTodos = (todos) => {
     $todoList.innerHTML = "";
-    let toBeRanderedTodos = getPaginatedArray();
+    let toBeRanderedTodos = getPaginatedArray(todos);
     toBeRanderedTodos.forEach((todo) => {
         $todoList.appendChild(createTodoElement(todo));
     });
