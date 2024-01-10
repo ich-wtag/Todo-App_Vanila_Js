@@ -16,10 +16,12 @@ import {
     showCompletedTodo,
 } from "./utility.js";
 
+import { INCOMPLETE, COMPLETE } from "./const.js";
+
 let todos = [];
 let searchedArray = [];
-let filteredArray = [];
 
+let filteredState = "all";
 let isSearched = false;
 let filterValue = "all";
 
@@ -47,13 +49,13 @@ const addTodoHandler = () => {
     clearInputField($todoInput);
 
     clearInputField($searchInput);
-    filterTodosHandler(filterValue);
+    filterTodosHandler(filteredState);
 };
 
 const deleteTodoHandler = (todoId) => {
     todos = todos.filter((todo) => todo.id !== todoId);
     clearInputField($searchInput);
-    filterTodosHandler(filterValue);
+    filterTodosHandler(filteredState);
 };
 
 const editTodoHandler = (
@@ -134,7 +136,7 @@ const markDoneTodoHandler = (
 
     todo.title = sanitizeInput(inputElement.value).trim();
     todo.isCompleted = true;
-    filterTodosHandler(filterValue);
+    filterTodosHandler(filteredState);
 };
 
 const searchHandler = () => {
@@ -143,21 +145,23 @@ const searchHandler = () => {
         todo.title.toLowerCase().includes(searchedValue)
     );
 
-    filterTodosHandler(filterValue);
+    filterTodosHandler(filteredState);
 };
 
-const filterTodosHandler = (toFilterValue) => {
-    isSearched = $searchInput.value.trim().length ? true : false;
-    let tobeFilteredArray = isSearched ? searchedArray : todos;
+const filterTodosHandler = (stateValue) => {
+    let filteredArray = [];
+    const isSearched = !!$searchInput.value.trim();
 
-    switch (toFilterValue) {
-        case "incomplete":
+    const tobeFilteredArray = isSearched ? searchedArray : todos;
+
+    switch (stateValue) {
+        case INCOMPLETE:
             filteredArray = tobeFilteredArray.filter(
                 (todo) => !todo.isCompleted
             );
             break;
 
-        case "complete":
+        case COMPLETE:
             filteredArray = tobeFilteredArray.filter(
                 (todo) => todo.isCompleted
             );
@@ -168,34 +172,8 @@ const filterTodosHandler = (toFilterValue) => {
             break;
     }
 
-    filterValue = toFilterValue;
-    renderTodos();
-};
-
-const paginationHandler = () => {
-    if (currentPage < totalPage) {
-        endIndex += todosNeedToLoad;
-        currentPage++;
-    } else {
-        currentPage = 1;
-        endIndex = 9;
-    }
-    filterTodosHandler(filterValue);
-};
-
-const getPaginatedArray = () => {
-    let startIndex = 0;
-    totalPage = Math.round((filteredArray.length - 1) / todosNeedToLoad);
-
-    if (totalPage > 1) {
-        $loadMoreButton.classList.remove("hide");
-    } else {
-        $loadMoreButton.classList.add("hide");
-    }
-    $loadMoreButton.textContent =
-        currentPage < totalPage ? "Load More" : "Show Less";
-
-    return filteredArray?.slice(startIndex, endIndex);
+    filteredState = stateValue;
+    renderTodos(filteredArray);
 };
 
 const createTodoElement = (todo) => {
