@@ -18,7 +18,6 @@ import {
 import { INCOMPLETE, COMPLETE } from "./const.js";
 
 let todos = [];
-let searchedArray = [];
 
 let filteredState = "all";
 
@@ -41,13 +40,13 @@ const addTodoHandler = () => {
     clearInputField($todoInput);
 
     clearInputField($searchInput);
-    filterTodosHandler(filteredState);
+    renderTodos(filteredState);
 };
 
 const deleteTodoHandler = (todoId) => {
     todos = todos.filter((todo) => todo.id !== todoId);
     clearInputField($searchInput);
-    filterTodosHandler(filteredState);
+    renderTodos(filteredState);
 };
 
 const editTodoHandler = (
@@ -128,44 +127,29 @@ const markDoneTodoHandler = (
 
     todo.title = sanitizeInput(inputElement.value).trim();
     todo.isCompleted = true;
-    filterTodosHandler(filteredState);
+    renderTodos(filteredState);
 };
 
 const searchHandler = () => {
     const searchedValue = $searchInput.value.toLowerCase().trim();
-    searchedArray = todos.filter((todo) =>
+
+    return todos.filter((todo) =>
         todo.title.toLowerCase().includes(searchedValue)
     );
-
-    filterTodosHandler(filteredState);
 };
 
-const filterTodosHandler = (stateValue) => {
-    let filteredArray = [];
-    const isSearched = !!$searchInput.value.trim();
-
-    const tobeFilteredArray = isSearched ? searchedArray : todos;
-
+const filterTodosHandler = (stateValue, tobeFilteredArray) => {
+    filteredState = stateValue;
     switch (stateValue) {
         case INCOMPLETE:
-            filteredArray = tobeFilteredArray.filter(
-                (todo) => !todo.isCompleted
-            );
-            break;
+            return tobeFilteredArray.filter((todo) => !todo.isCompleted);
 
         case COMPLETE:
-            filteredArray = tobeFilteredArray.filter(
-                (todo) => todo.isCompleted
-            );
-            break;
+            return tobeFilteredArray.filter((todo) => todo.isCompleted);
 
         default:
-            filteredArray = [...tobeFilteredArray];
-            break;
+            return [...tobeFilteredArray];
     }
-
-    filteredState = stateValue;
-    renderTodos(filteredArray);
 };
 
 const createTodoElement = (todo) => {
@@ -237,19 +221,21 @@ const createTodoElement = (todo) => {
     return $todo;
 };
 
-const renderTodos = (todos) => {
+const renderTodos = (stateValue) => {
     $todoList.innerHTML = "";
-    todos.forEach((todo) => {
+
+    const arrayFromSearched = searchHandler();
+    const arrayTobeRendered = filterTodosHandler(stateValue, arrayFromSearched);
+
+    arrayTobeRendered.forEach((todo) => {
         $todoList.appendChild(createTodoElement(todo));
     });
 };
 
 $addButton.addEventListener("click", addTodoHandler);
-$searchInput.addEventListener("input", searchHandler);
-$allTodoButton.addEventListener("click", () => filterTodosHandler("all"));
+$searchInput.addEventListener("input", () => renderTodos(filteredState));
+$allTodoButton.addEventListener("click", () => renderTodos("all"));
 $incompleteTodoButton.addEventListener("click", () =>
-    filterTodosHandler("incomplete")
+    renderTodos("incomplete")
 );
-$completeTodoButton.addEventListener("click", () =>
-    filterTodosHandler("complete")
-);
+$completeTodoButton.addEventListener("click", () => renderTodos("complete"));
