@@ -15,12 +15,12 @@ import {
     showCompletedTodo,
 } from "./utility.js";
 
+import { INCOMPLETE, COMPLETE } from "./const.js";
+
 let todos = [];
 let searchedArray = [];
-let filteredArray = [];
 
-let isSearched = false;
-let filterValue = "all";
+let filteredState = "all";
 
 const addTodoHandler = () => {
     const todoTitle = sanitizeInput($todoInput.value).trim();
@@ -41,13 +41,13 @@ const addTodoHandler = () => {
     clearInputField($todoInput);
 
     clearInputField($searchInput);
-    filterTodosHandler(filterValue);
+    filterTodosHandler(filteredState);
 };
 
 const deleteTodoHandler = (todoId) => {
     todos = todos.filter((todo) => todo.id !== todoId);
     clearInputField($searchInput);
-    filterTodosHandler(filterValue);
+    filterTodosHandler(filteredState);
 };
 
 const editTodoHandler = (
@@ -128,7 +128,7 @@ const markDoneTodoHandler = (
 
     todo.title = sanitizeInput(inputElement.value).trim();
     todo.isCompleted = true;
-    filterTodosHandler(filterValue);
+    filterTodosHandler(filteredState);
 };
 
 const searchHandler = () => {
@@ -137,21 +137,23 @@ const searchHandler = () => {
         todo.title.toLowerCase().includes(searchedValue)
     );
 
-    filterTodosHandler(filterValue);
+    filterTodosHandler(filteredState);
 };
 
-const filterTodosHandler = (toFilterValue) => {
-    isSearched = $searchInput.value.trim().length ? true : false;
-    let tobeFilteredArray = isSearched ? searchedArray : todos;
+const filterTodosHandler = (stateValue) => {
+    let filteredArray = [];
+    const isSearched = !!$searchInput.value.trim();
 
-    switch (toFilterValue) {
-        case "incomplete":
+    const tobeFilteredArray = isSearched ? searchedArray : todos;
+
+    switch (stateValue) {
+        case INCOMPLETE:
             filteredArray = tobeFilteredArray.filter(
                 (todo) => !todo.isCompleted
             );
             break;
 
-        case "complete":
+        case COMPLETE:
             filteredArray = tobeFilteredArray.filter(
                 (todo) => todo.isCompleted
             );
@@ -162,7 +164,7 @@ const filterTodosHandler = (toFilterValue) => {
             break;
     }
 
-    filterValue = toFilterValue;
+    filteredState = stateValue;
     renderTodos(filteredArray);
 };
 
