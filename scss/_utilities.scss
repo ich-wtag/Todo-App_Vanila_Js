@@ -1,0 +1,30 @@
+.button {
+    cursor: pointer;
+
+    &:active {
+        transform: translateY(0.13rem);
+    }
+
+    &-secondary {
+        @extend .button;
+        background: $white-color;
+        color: $gray-color;
+    }
+
+    &-primary-bg-violet {
+        @extend .button;
+        padding: 0.56rem 1.06rem;
+        font-size: 1rem;
+        color: $white-color;
+        background: $violet-color-v400;
+    }
+
+    &-primary-bg-white {
+        @extend .button;
+        font-size: 1rem;
+        line-height: 1.2rem;
+        padding: 0.56rem 0.81rem;
+        color: $black-color;
+        background: $white-color;
+    }
+}

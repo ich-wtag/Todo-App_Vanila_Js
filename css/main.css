@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+.button, .button-primary-bg-white, .button-primary-bg-violet, .button-secondary {
+  cursor: pointer;
+}
+.button:active, .button-primary-bg-white:active, .button-primary-bg-violet:active, .button-secondary:active {
+  -webkit-transform: translateY(0.13rem);
+          transform: translateY(0.13rem);
+}
+.button-secondary {
+  background: #ffffff;
+  color: #bbbdd0;
+}
+.button-primary-bg-violet {
+  padding: 0.56rem 1.06rem;
+  font-size: 1rem;
+  color: #ffffff;
+  background: #7a8dfd;
+}
+.button-primary-bg-white {
+  font-size: 1rem;
+  line-height: 1.2rem;
+  padding: 0.56rem 0.81rem;
+  color: #32394b;
+  background: #ffffff;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+ol li {
+  margin: 20px 0;
+}
+
+ol li p {
+  display: inline-block;
+}
+
+ol li button {
+  margin-left: 10px;
+}
+
+.hide {
+  display: none;
+}
+
+.error-message {
+  color: red;
+  font-weight: 600;
+}
+
+.done-todo {
+  text-decoration: line-through;
+}
+
+.search-container {
+  margin-top: 20px;
+}
+
+.filter-button-container {
+  margin: 20px;
+}
+
+.load-more-button {
+  margin: 40px 20px;
+}

@@ -5,30 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo App-Vanilla JS</title>
 
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
-    <div class="search-container">
-        <input type="text" id="search-input">
-        <button id="search-button">search</button>
-    </div>
+    <nav>
+        <div>
+            <img src="./assets/leaf.png" alt="Logo">
+            <h1>Todos</h1>
+        </div>
+        <div class="search-container">
+            <input type="text" id="search-input">
+            <button id="search-button">search</button>
+        </div>
+    </nav>
+  
+    <header>
+        <div>
+            <h2>Add Tasks</h2>
+            <button type="button" id="add-button">
+                <img src="./assets/plus-icon.png" alt="plus-icon">
+                Create
+            </button>
+        </div>
+        <div class="filter-button-container">
+            <button id="all">All</button>
+            <button id="incomplete">Incomplete</button>
+            <button id="complete">Complete</button>
+        </div>
+    </header>
 
-    <h1>Add Todos</h1>
+   
     <div id="input-container">
         <input type="text" id="input-field">
-        <button type="button" id="add-button">Add Todo</button>
+        
     </div>
-    <div class="filter-button-container">
-        <button id="all">All</button>
-        <button id="incomplete">Incomplete</button>
-        <button id="complete">Complete</button>
-    </div>
+    
     <ol id="todo-list"></ol>
 
     <p class="error-message hide"></p>
 
     <button class="load-more-button hide"></button>
 
-    <script type="module" src="./script.js"></script>
+    <script type="module" src="./js/script.js"></script>
 </body>
 </html>
