@@ -22,8 +22,6 @@ let todos = [];
 let searchedArray = [];
 
 let filteredState = "all";
-let isSearched = false;
-let filterValue = "all";
 
 let endIndex = 9;
 const todosNeedToLoad = 6;
@@ -176,6 +174,32 @@ const filterTodosHandler = (stateValue) => {
     renderTodos(filteredArray);
 };
 
+const paginationHandler = () => {
+    if (currentPage < totalPage) {
+        endIndex += todosNeedToLoad;
+        currentPage++;
+    } else {
+        currentPage = 1;
+        endIndex = 9;
+    }
+    filterTodosHandler(filteredState);
+};
+
+const getPaginatedArray = (toBePaginatedArray) => {
+    let startIndex = 0;
+    totalPage = Math.round((toBePaginatedArray.length - 1) / todosNeedToLoad);
+
+    if (totalPage > 1) {
+        $loadMoreButton.classList.remove("hide");
+    } else {
+        $loadMoreButton.classList.add("hide");
+    }
+    $loadMoreButton.textContent =
+        currentPage < totalPage ? "Load More" : "Show Less";
+
+    return toBePaginatedArray?.slice(startIndex, endIndex);
+};
+
 const createTodoElement = (todo) => {
     const $todo = document.createElement("li");
     const $paragraphElement = document.createElement("p");
@@ -245,9 +269,9 @@ const createTodoElement = (todo) => {
     return $todo;
 };
 
-const renderTodos = () => {
+const renderTodos = (todos) => {
     $todoList.innerHTML = "";
-    let toBeRanderedTodos = getPaginatedArray();
+    let toBeRanderedTodos = getPaginatedArray(todos);
     toBeRanderedTodos.forEach((todo) => {
         $todoList.appendChild(createTodoElement(todo));
     });
