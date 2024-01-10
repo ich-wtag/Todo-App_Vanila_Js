@@ -3,8 +3,14 @@ import {
     $todoInput,
     $todoList,
     $errorMessageElement,
+    $searchInput,
 } from "./element.js";
-import { sanitizeInput, clearInputField, showErrorMessage } from "./utility.js";
+import {
+    sanitizeInput,
+    clearInputField,
+    showErrorMessage,
+    showCompletedTodo,
+} from "./utility.js";
 
 let todos = [];
 
@@ -22,15 +28,18 @@ const addTodoHandler = () => {
         id: new Date().getTime(),
         title: todoTitle,
         isEditing: false,
+        isCompleted: false,
     });
     clearInputField($todoInput);
 
+    clearInputField($searchInput);
     renderTodos(todos);
 };
 
 const deleteTodoHandler = (todoId) => {
     todos = todos.filter((todo) => todo.id !== todoId);
     renderTodos(todos);
+    clearInputField($searchInput);
 };
 
 const editTodoHandler = (
@@ -63,6 +72,8 @@ const editTodoHandler = (
     inputElement.classList.toggle("hide");
     cancelButton.classList.toggle("hide");
     paragraphElement.classList.toggle("hide");
+
+    clearInputField($searchInput);
 };
 
 const cancelEditingTodoHandler = (
@@ -79,7 +90,7 @@ const cancelEditingTodoHandler = (
 
     editButton.innerText = "Edit";
     todo.isEditing = false;
-    todo.isComplete = false;
+    clearInputField($searchInput);
 };
 
 const markDoneTodoHandler = (
@@ -102,14 +113,23 @@ const markDoneTodoHandler = (
         $errorMessageElement.classList.add("hide");
     }
 
-    paragraphElement.classList.add("done-todo");
-    e.target.classList.add("hide");
-    editButton.classList.add("hide");
     inputElement.classList.add("hide");
     cancelButton.classList.add("hide");
 
+    showCompletedTodo(paragraphElement, editButton, e.target);
+    clearInputField($searchInput);
+
     todo.title = sanitizeInput(inputElement.value).trim();
-    todo.isComplete = true;
+    todo.isCompleted = true;
+};
+
+const searchHandler = () => {
+    const searchedValue = $searchInput.value.toLowerCase().trim();
+    const searchedArray = todos.filter((todo) =>
+        todo.title.toLowerCase().includes(searchedValue)
+    );
+
+    renderTodos(searchedArray);
 };
 
 const createTodoElement = (todo) => {
@@ -131,6 +151,10 @@ const createTodoElement = (todo) => {
 
     $cancelButton.classList.add("hide");
     $inputElement.classList.add("hide");
+
+    if (todo.isCompleted) {
+        showCompletedTodo($paragraphElement, $editButton, $doneButton);
+    }
 
     $deleteButton.addEventListener("click", () => deleteTodoHandler(todo.id));
 
@@ -185,3 +209,4 @@ const renderTodos = (todos) => {
 };
 
 $addButton.addEventListener("click", addTodoHandler);
+$searchInput.addEventListener("input", searchHandler);
