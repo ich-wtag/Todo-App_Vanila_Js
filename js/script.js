@@ -14,9 +14,16 @@ import {
     clearInputField,
     showErrorMessage,
     showCompletedTodo,
+    addCommonClassesToButton,
 } from "./utility.js";
 
-import { INCOMPLETE, COMPLETE, DELETEICONSOURCE } from "./const.js";
+import {
+    INCOMPLETE,
+    COMPLETE,
+    DELETEICON,
+    EDITICON,
+    DONEICON,
+} from "./const.js";
 
 let todos = [];
 
@@ -56,16 +63,16 @@ const deleteTodoHandler = (todoId) => {
 };
 
 const editTodoHandler = (
-    e,
+    editButton,
     inputElement,
     paragraphElement,
     cancelButton,
+    deleteButton,
+    editIcon,
     todo
 ) => {
-    const $buttonElement = e.target;
-
     if (!todo.isEditing) {
-        $buttonElement.innerText = "Update";
+        editButton.innerHTML = "Save";
         inputElement.value = todo.title;
         todo.isEditing = true;
     } else if (todo.isEditing && !inputElement.value) {
@@ -76,12 +83,15 @@ const editTodoHandler = (
         return;
     } else {
         $errorMessageElement.classList.add("hide");
-        $buttonElement.innerText = "Edit";
+        editButton.innerText = "";
+        editButton.appendChild(editIcon);
         paragraphElement.textContent = inputElement.value;
         todo.title = inputElement.value;
         todo.isEditing = false;
     }
 
+    editButton.classList.toggle("button-secondary");
+    deleteButton.classList.toggle("hide");
     inputElement.classList.toggle("hide");
     cancelButton.classList.toggle("hide");
     paragraphElement.classList.toggle("hide");
@@ -90,18 +100,23 @@ const editTodoHandler = (
 };
 
 const cancelEditingTodoHandler = (
-    e,
+    cancelButton,
     inputElement,
     paragraphElement,
     editButton,
+    deleteButton,
+    editIcon,
     todo
 ) => {
     inputElement.classList.add("hide");
-    e.target.classList.add("hide");
+    cancelButton.classList.add("hide");
     paragraphElement.classList.remove("hide");
+    deleteButton.classList.remove("hide");
     $errorMessageElement.classList.add("hide");
 
-    editButton.innerText = "Edit";
+    editButton.classList.toggle("button-secondary");
+    editButton.innerText = "";
+    editButton.appendChild(editIcon);
     todo.isEditing = false;
 };
 
@@ -196,24 +211,42 @@ const getPaginatedArray = (toBePaginatedArray) => {
 const createTodoElement = (todo) => {
     const $todo = document.createElement("div");
     const $paragraphElement = document.createElement("h3");
-    const $iconSource = document.createElement("img");
+    const $buttonWrapper = document.createElement("div");
     const $deleteButton = document.createElement("button");
     const $editButton = document.createElement("button");
     const $inputElement = document.createElement("input");
     const $cancelButton = document.createElement("button");
     const $doneButton = document.createElement("button");
+    const $doneIcon = document.createElement("img");
+    const $deleteIcon = document.createElement("img");
+    const $editIcon = document.createElement("img");
+    const $cancelIcon = document.createElement("img");
+
+    $buttonWrapper.classList.add("flex", "task__button-wrapper");
+    addCommonClassesToButton($deleteButton);
+    addCommonClassesToButton($editButton);
+    addCommonClassesToButton($doneButton);
+    addCommonClassesToButton($cancelButton);
 
     $todo.classList.add("task");
     $paragraphElement.classList.add("task__title");
 
     $paragraphElement.innerText = todo.title;
     $inputElement.value = todo.title;
-    $iconSource.src = DELETEICONSOURCE;
-    $deleteButton.appendChild($iconSource);
 
-    $editButton.innerText = "Edit";
-    $cancelButton.textContent = "Cancel";
-    $doneButton.textContent = "Done";
+    $deleteIcon.src = DELETEICON;
+    $deleteButton.appendChild($deleteIcon);
+
+    $editIcon.src = EDITICON;
+    $editButton.appendChild($editIcon);
+
+    $doneIcon.src = DONEICON;
+    $doneButton.appendChild($doneIcon);
+
+    $cancelIcon.src = DELETEICON;
+    $cancelButton.appendChild($cancelIcon);
+
+    // $cancelButton.innerText = "Cancel";
 
     $cancelButton.classList.add("hide");
     $inputElement.classList.add("hide");
@@ -226,20 +259,24 @@ const createTodoElement = (todo) => {
 
     $editButton.addEventListener("click", (e) =>
         editTodoHandler(
-            e,
+            $editButton,
             $inputElement,
             $paragraphElement,
             $cancelButton,
+            $deleteButton,
+            $editIcon,
             todo
         )
     );
 
     $cancelButton.addEventListener("click", (e) =>
         cancelEditingTodoHandler(
-            e,
+            $cancelButton,
             $inputElement,
             $paragraphElement,
             $editButton,
+            $deleteButton,
+            $editIcon,
             todo
         )
     );
@@ -255,14 +292,13 @@ const createTodoElement = (todo) => {
         )
     );
 
-    $todo.append(
-        $paragraphElement,
-        $inputElement,
-        $deleteButton,
+    $buttonWrapper.append(
         $editButton,
         $doneButton,
+        $deleteButton,
         $cancelButton
     );
+    $todo.append($paragraphElement, $inputElement, $buttonWrapper);
 
     return $todo;
 };

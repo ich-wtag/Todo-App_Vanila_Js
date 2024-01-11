@@ -17,3 +17,7 @@ export const showCompletedTodo = (paragraphElement, editButton, doneButton) => {
     editButton.classList.add("hide");
     doneButton.classList.add("hide");
 };
+
+export const addCommonClassesToButton = (buttonElement) => {
+    buttonElement.classList.add("button-icon", "task__button");
+};
