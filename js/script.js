@@ -19,12 +19,11 @@ import {
 import { INCOMPLETE, COMPLETE, DELETEICONSOURCE } from "./const.js";
 
 let todos = [];
-let searchedArray = [];
 
-let filteredState = "all";
+let filterState = "all";
 
 let endIndex = 9;
-const todosNeedToLoad = 6;
+const todosNeedToBeLoaded = 6;
 let currentPage = 1;
 let totalPage = 1;
 
@@ -47,13 +46,13 @@ const addTodoHandler = () => {
     clearInputField($todoInput);
 
     clearInputField($searchInput);
-    filterTodosHandler(filteredState);
+    renderTodos();
 };
 
 const deleteTodoHandler = (todoId) => {
     todos = todos.filter((todo) => todo.id !== todoId);
     clearInputField($searchInput);
-    filterTodosHandler(filteredState);
+    renderTodos();
 };
 
 const editTodoHandler = (
@@ -134,60 +133,54 @@ const markDoneTodoHandler = (
 
     todo.title = sanitizeInput(inputElement.value).trim();
     todo.isCompleted = true;
-    filterTodosHandler(filteredState);
+    renderTodos();
 };
 
 const searchHandler = () => {
     const searchedValue = $searchInput.value.toLowerCase().trim();
-    searchedArray = todos.filter((todo) =>
-        todo.title.toLowerCase().includes(searchedValue)
-    );
 
-    filterTodosHandler(filteredState);
+    if (searchedValue === "") {
+        return todos;
+    }
+    return todos.filter((todo) => {
+        return todo.title.toLowerCase().includes(searchedValue);
+    });
 };
 
-const filterTodosHandler = (stateValue) => {
-    let filteredArray = [];
-    const isSearched = !!$searchInput.value.trim();
+const setFilter = (stateValue) => {
+    filterState = stateValue;
+    renderTodos();
+};
 
-    const tobeFilteredArray = isSearched ? searchedArray : todos;
-
-    switch (stateValue) {
+const filterHandler = (tobeFilteredArray) => {
+    switch (filterState) {
         case INCOMPLETE:
-            filteredArray = tobeFilteredArray.filter(
-                (todo) => !todo.isCompleted
-            );
-            break;
+            return tobeFilteredArray.filter((todo) => !todo.isCompleted);
 
         case COMPLETE:
-            filteredArray = tobeFilteredArray.filter(
-                (todo) => todo.isCompleted
-            );
-            break;
+            return tobeFilteredArray.filter((todo) => todo.isCompleted);
 
         default:
-            filteredArray = [...tobeFilteredArray];
-            break;
+            return tobeFilteredArray;
     }
-
-    filteredState = stateValue;
-    renderTodos(filteredArray);
 };
 
 const paginationHandler = () => {
     if (currentPage < totalPage) {
-        endIndex += todosNeedToLoad;
+        endIndex += todosNeedToBeLoaded;
         currentPage++;
     } else {
         currentPage = 1;
         endIndex = 9;
     }
-    filterTodosHandler(filteredState);
+    renderTodos();
 };
 
 const getPaginatedArray = (toBePaginatedArray) => {
-    let startIndex = 0;
-    totalPage = Math.round((toBePaginatedArray.length - 1) / todosNeedToLoad);
+    const startIndex = 0;
+    totalPage = Math.round(
+        (toBePaginatedArray.length - 1) / todosNeedToBeLoaded
+    );
 
     if (totalPage > 1) {
         $loadMoreButton.classList.remove("hide");
@@ -274,21 +267,22 @@ const createTodoElement = (todo) => {
     return $todo;
 };
 
-const renderTodos = (todos) => {
+const renderTodos = () => {
     $todoList.innerHTML = "";
-    let toBeRanderedTodos = getPaginatedArray(todos);
-    toBeRanderedTodos.forEach((todo) => {
+
+    const searchedTodos = searchHandler();
+    const filteredTodos = filterHandler(searchedTodos);
+
+    const paginatedTodos = getPaginatedArray(filteredTodos);
+
+    paginatedTodos.forEach((todo) => {
         $todoList.appendChild(createTodoElement(todo));
     });
 };
 
 $addButton.addEventListener("click", addTodoHandler);
-$searchInput.addEventListener("input", searchHandler);
-$allTodoButton.addEventListener("click", () => filterTodosHandler("all"));
-$incompleteTodoButton.addEventListener("click", () =>
-    filterTodosHandler("incomplete")
-);
-$completeTodoButton.addEventListener("click", () =>
-    filterTodosHandler("complete")
-);
+$searchInput.addEventListener("input", () => renderTodos());
+$allTodoButton.addEventListener("click", () => setFilter("all"));
+$incompleteTodoButton.addEventListener("click", () => setFilter("incomplete"));
+$completeTodoButton.addEventListener("click", () => setFilter("complete"));
 $loadMoreButton.addEventListener("click", paginationHandler);
