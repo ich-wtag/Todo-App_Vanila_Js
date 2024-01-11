@@ -16,7 +16,7 @@ import {
     showCompletedTodo,
 } from "./utility.js";
 
-import { INCOMPLETE, COMPLETE } from "./const.js";
+import { INCOMPLETE, COMPLETE, DELETEICONSOURCE } from "./const.js";
 
 let todos = [];
 let searchedArray = [];
@@ -201,18 +201,23 @@ const getPaginatedArray = (toBePaginatedArray) => {
 };
 
 const createTodoElement = (todo) => {
-    const $todo = document.createElement("li");
-    const $paragraphElement = document.createElement("p");
+    const $todo = document.createElement("div");
+    const $paragraphElement = document.createElement("h3");
+    const $iconSource = document.createElement("img");
     const $deleteButton = document.createElement("button");
     const $editButton = document.createElement("button");
     const $inputElement = document.createElement("input");
     const $cancelButton = document.createElement("button");
     const $doneButton = document.createElement("button");
 
+    $todo.classList.add("task");
+    $paragraphElement.classList.add("task__title");
+
     $paragraphElement.innerText = todo.title;
     $inputElement.value = todo.title;
+    $iconSource.src = DELETEICONSOURCE;
+    $deleteButton.appendChild($iconSource);
 
-    $deleteButton.innerText = "Delete";
     $editButton.innerText = "Edit";
     $cancelButton.textContent = "Cancel";
     $doneButton.textContent = "Done";

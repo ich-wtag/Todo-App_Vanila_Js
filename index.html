@@ -5,44 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo App-Vanilla JS</title>
 
-    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
     <nav class="navbar">
         <div class="container flex-between">
-            <div class="flex title-container">
-                <img class="title-image" src="./assets/leaf.png" alt="Logo">
-                <h1 class="title-text">Todos</h1>
+            <div class="flex navbar__logo">
+                <img class="logo__image" src="./assets/leaf.png" alt="Logo">
+                <h1 class="logo__text">Todos</h1>
             </div>
-            <div class="flex search-container">
-                <input class="search-input " type="text" >
-                <button class="button-secondary search-button" ><img src="./assets/search-icon.svg" alt="Search Icon"></button>
+            <div class="flex navbar__search-wrapper">
+                <input class="search__input" type="text" >
+                <button class="button-icon search__button" ><img src="./assets/search-icon.svg" alt="Search Icon"></button>
             </div>
         </div>
     </nav>
   
-    <header>
-        <div>
-            <h2>Add Tasks</h2>
-            <button type="button" id="add-button">
-                <img src="./assets/plus-icon.png" alt="plus-icon">
-                Create
+    <header class="header container">
+        <h2 class="header__title">Add Tasks</h2>
+        <div class="flex-between header__button-wrapper">
+            <button class="flex button-primary header__add-button"  type="button">
+                <img class="header__button-icon" src="./assets/plus-icon.png" alt="create a new task">
+                <span>Create</span>
             </button>
-        </div>
-        <div class="filter-button-container">
-            <button id="all">All</button>
-            <button id="incomplete">Incomplete</button>
-            <button id="complete">Complete</button>
+
+            <div class="flex filter-button-wrapper">
+                <button class="button-secondary" id="all">All</button>
+                <button class="button-secondary" id="incomplete">Incomplete</button>
+                <button class="button-secondary" id="complete">Complete</button>
+            </div>
         </div>
     </header>
 
-   
-    <div id="input-container">
+   <main class="container task-wrapper" id="todo-list">
+        <div class="task">
+            <textarea class="task__input" id="input-field" rows="3"></textarea>
+            <div class="flex task__button-wrapper"> 
+                <button class="button-secondary" id="add-button">Add Task</button>
+                <button class="button-icon task__button">
+                    <img class="task__button-icon" src="./assets/delete-icon.svg" alt="delete task">
+                </button>
+            </div>
+        </div>
+        <div class="task">
+            <h3 class="task__title">Complete Initial setup of the Todo App</h3>
+            <strong class="task__created-at">
+                <span>Created At:</span>
+                <span class="task__created-time">21.02.22</span>
+            </strong>
+            <div class="flex task__button-wrapper"> 
+                <button class="button-icon task__button">
+                    <img class="task__button-icon" src="./assets/tick-mark.svg" alt="mark done task">
+                </button>
+                <button class="button-icon task__button">
+                    <img class="task__button-icon" src="./assets/pencil-icon.svg" alt="edit update task">
+                </button>
+                <button class="button-icon task__button">
+                    <img class="task__button-icon" src="./assets/delete-icon.svg" alt="delete task">
+                </button>
+            </div>
+        </div>
+        <div class="task">
+            <h3 class="task__title task-completed">Complete Initial setup of the Todo App</h3>
+            <strong class="task__created-at">
+                <span>Created At:</span>
+                <span class="task__created-time">21.02.22</span>
+            </strong>
+            <div class="flex task__button-wrapper"> 
+                <button class="button-icon hide task__button">
+                    <img class="task__button-icon" src="./assets/tick-mark.svg" alt="mark done task">
+                </button>
+                <button class="button-icon hide task__button">
+                    <img class="task__button-icon" src="./assets/pencil-icon.svg" alt="edit update task">
+                </button>
+                <button class="button-icon task__button">
+                    <img class="task__button-icon" src="./assets/delete-icon.svg" alt="delete task">
+                </button>
+                
+                <p class="task__completed-badge">Completed in 3 day</p>
+            </div>
+        </div>
+   </main>
+
+    <!-- <div id="input-wrapper">
         <input type="text" id="input-field">
         
     </div>
     
-    <ol id="todo-list"></ol>
+    <ol id="todo-list"></ol> -->
 
     <p class="error-message hide"></p>
 
