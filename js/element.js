@@ -1,5 +1,8 @@
+export const $createButton = document.getElementById("createButton");
+export const $inputWrapper = document.getElementById("input-wrapper");
 export const $todoInput = document.getElementById("input-field");
 export const $addButton = document.getElementById("add-button");
+export const $clearButton = document.getElementById("clear-button");
 export const $todoList = document.getElementById("todo-list");
 export const $errorMessageElement = document.querySelector(".error-message");
 export const $searchInput = document.querySelector(".search__input");

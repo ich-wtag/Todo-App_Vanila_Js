@@ -8,13 +8,19 @@ import {
     $completeTodoButton,
     $incompleteTodoButton,
     $loadMoreButton,
+    $searchButton,
+    $createButton,
+    $inputWrapper,
+    $clearButton,
 } from "./element.js";
 import {
     sanitizeInput,
     clearInputField,
     showErrorMessage,
     showCompletedTodo,
-    addCommonClassesToButton,
+    addButtonClasses,
+    showCompletedTime,
+    showFormattedDate,
 } from "./utility.js";
 
 import {
@@ -23,6 +29,7 @@ import {
     DELETEICON,
     EDITICON,
     DONEICON,
+    PLUSICON,
 } from "./const.js";
 
 let todos = [];
@@ -33,6 +40,16 @@ let endIndex = 9;
 const todosNeedToBeLoaded = 6;
 let currentPage = 1;
 let totalPage = 1;
+
+const showInputWrapper = () => {
+    if ($inputWrapper.classList.contains("hide")) {
+        $createButton.innerText = "Hide";
+    } else {
+        $createButton.innerHTML = `${PLUSICON} Create`;
+    }
+    $inputWrapper.classList.toggle("hide");
+    renderTodos();
+};
 
 const addTodoHandler = () => {
     const todoTitle = sanitizeInput($todoInput.value).trim();
@@ -47,6 +64,7 @@ const addTodoHandler = () => {
     todos.unshift({
         id: new Date().getTime(),
         title: todoTitle,
+        createdAt: new Date().toUTCString(),
         isEditing: false,
         isCompleted: false,
     });
@@ -65,10 +83,10 @@ const deleteTodoHandler = (todoId) => {
 const editTodoHandler = (
     editButton,
     inputElement,
+    headingElement,
     paragraphElement,
     cancelButton,
     deleteButton,
-    editIcon,
     todo
 ) => {
     if (!todo.isEditing) {
@@ -83,9 +101,8 @@ const editTodoHandler = (
         return;
     } else {
         $errorMessageElement.classList.add("hide");
-        editButton.innerText = "";
-        editButton.appendChild(editIcon);
-        paragraphElement.textContent = inputElement.value;
+        editButton.innerHTML = EDITICON;
+        headingElement.textContent = inputElement.value;
         todo.title = inputElement.value;
         todo.isEditing = false;
     }
@@ -95,6 +112,7 @@ const editTodoHandler = (
     inputElement.classList.toggle("hide");
     cancelButton.classList.toggle("hide");
     paragraphElement.classList.toggle("hide");
+    headingElement.classList.toggle("hide");
 
     clearInputField($searchInput);
 };
@@ -102,52 +120,37 @@ const editTodoHandler = (
 const cancelEditingTodoHandler = (
     cancelButton,
     inputElement,
+    headingElement,
     paragraphElement,
     editButton,
     deleteButton,
-    editIcon,
     todo
 ) => {
     inputElement.classList.add("hide");
     cancelButton.classList.add("hide");
+    headingElement.classList.remove("hide");
     paragraphElement.classList.remove("hide");
     deleteButton.classList.remove("hide");
     $errorMessageElement.classList.add("hide");
 
     editButton.classList.toggle("button-secondary");
-    editButton.innerText = "";
-    editButton.appendChild(editIcon);
+    editButton.innerHTML = EDITICON;
     todo.isEditing = false;
 };
 
-const markDoneTodoHandler = (
-    e,
-    paragraphElement,
-    editButton,
-    inputElement,
-    cancelButton,
-    todo
-) => {
+const markDoneTodoHandler = (inputElement, todo) => {
     if (!inputElement.value.trim()) {
         showErrorMessage(
             "You can not make done a todo without any title. Please add a title"
         );
         return;
     }
-    if (paragraphElement.classList.contains("hide")) {
-        paragraphElement.innerText = sanitizeInput(inputElement.value).trim();
-        paragraphElement.classList.remove("hide");
-        $errorMessageElement.classList.add("hide");
-    }
 
-    inputElement.classList.add("hide");
-    cancelButton.classList.add("hide");
-
-    showCompletedTodo(paragraphElement, editButton, e.target);
     clearInputField($searchInput);
 
     todo.title = sanitizeInput(inputElement.value).trim();
     todo.isCompleted = true;
+    todo.completedAt = showCompletedTime(todo.createdAt);
     renderTodos();
 };
 
@@ -160,6 +163,10 @@ const searchHandler = () => {
     return todos.filter((todo) => {
         return todo.title.toLowerCase().includes(searchedValue);
     });
+};
+
+const toggleSearchBar = () => {
+    $searchInput.classList.toggle("hide");
 };
 
 const setFilter = (stateValue) => {
@@ -210,101 +217,115 @@ const getPaginatedArray = (toBePaginatedArray) => {
 
 const createTodoElement = (todo) => {
     const $todo = document.createElement("div");
-    const $paragraphElement = document.createElement("h3");
+    const $headingElement = document.createElement("h3");
+    const $paragraphElement = document.createElement("p");
     const $buttonWrapper = document.createElement("div");
     const $deleteButton = document.createElement("button");
     const $editButton = document.createElement("button");
-    const $inputElement = document.createElement("input");
+    const $inputElement = document.createElement("textarea");
     const $cancelButton = document.createElement("button");
     const $doneButton = document.createElement("button");
-    const $doneIcon = document.createElement("img");
-    const $deleteIcon = document.createElement("img");
-    const $editIcon = document.createElement("img");
-    const $cancelIcon = document.createElement("img");
+    const $completdBadgeElement = document.createElement("p");
+    const $spanElement = document.createElement("span");
 
     $buttonWrapper.classList.add("flex", "task__button-wrapper");
-    addCommonClassesToButton($deleteButton);
-    addCommonClassesToButton($editButton);
-    addCommonClassesToButton($doneButton);
-    addCommonClassesToButton($cancelButton);
+    addButtonClasses($deleteButton);
+    addButtonClasses($editButton);
+    addButtonClasses($doneButton);
+    addButtonClasses($cancelButton);
 
     $todo.classList.add("task");
-    $paragraphElement.classList.add("task__title");
+    $headingElement.classList.add("task__title");
+    $paragraphElement.classList.add("task__created-at");
+    $inputElement.classList.add("task__input");
+    $inputElement.rows = 3;
 
-    $paragraphElement.innerText = todo.title;
+    $headingElement.innerText = todo.title;
+    $paragraphElement.innerText = `Created At : ${showFormattedDate(
+        todo.createdAt
+    )}`;
     $inputElement.value = todo.title;
 
-    $deleteIcon.src = DELETEICON;
-    $deleteButton.appendChild($deleteIcon);
+    $deleteButton.innerHTML = DELETEICON;
 
-    $editIcon.src = EDITICON;
-    $editButton.appendChild($editIcon);
+    $editButton.innerHTML = EDITICON;
 
-    $doneIcon.src = DONEICON;
-    $doneButton.appendChild($doneIcon);
+    $doneButton.innerHTML = DONEICON;
 
-    $cancelIcon.src = DELETEICON;
-    $cancelButton.appendChild($cancelIcon);
+    $cancelButton.innerHTML = DELETEICON;
 
-    // $cancelButton.innerText = "Cancel";
+    $completdBadgeElement.innerHTML = `Completed in ${todo.completedAt}`;
+    $spanElement.innerText = `${todo.completedAt > 1}` ? " day" : " days";
 
+    $completdBadgeElement.append($spanElement);
+
+    $completdBadgeElement.classList.add("task__completed-badge", "hide");
     $cancelButton.classList.add("hide");
     $inputElement.classList.add("hide");
 
     if (todo.isCompleted) {
-        showCompletedTodo($paragraphElement, $editButton, $doneButton);
+        showCompletedTodo(
+            $headingElement,
+            $editButton,
+            $doneButton,
+            $completdBadgeElement
+        );
     }
 
     $deleteButton.addEventListener("click", () => deleteTodoHandler(todo.id));
 
-    $editButton.addEventListener("click", (e) =>
+    $editButton.addEventListener("click", () =>
         editTodoHandler(
             $editButton,
             $inputElement,
+            $headingElement,
             $paragraphElement,
             $cancelButton,
             $deleteButton,
-            $editIcon,
+
             todo
         )
     );
 
-    $cancelButton.addEventListener("click", (e) =>
+    $cancelButton.addEventListener("click", () =>
         cancelEditingTodoHandler(
             $cancelButton,
             $inputElement,
+            $headingElement,
             $paragraphElement,
             $editButton,
             $deleteButton,
-            $editIcon,
             todo
         )
     );
 
     $doneButton.addEventListener("click", (e) =>
-        markDoneTodoHandler(
-            e,
-            $paragraphElement,
-            $editButton,
-            $inputElement,
-            $cancelButton,
-            todo
-        )
+        markDoneTodoHandler($inputElement, todo)
     );
 
     $buttonWrapper.append(
         $editButton,
         $doneButton,
         $deleteButton,
-        $cancelButton
+        $cancelButton,
+        $completdBadgeElement
     );
-    $todo.append($paragraphElement, $inputElement, $buttonWrapper);
+    $todo.append(
+        $headingElement,
+        $paragraphElement,
+        $inputElement,
+        $buttonWrapper
+    );
 
     return $todo;
 };
 
 const renderTodos = () => {
     $todoList.innerHTML = "";
+
+    if (!$inputWrapper.classList.contains("hide")) {
+        $todoList.appendChild($inputWrapper);
+    }
 
     const searchedTodos = searchHandler();
     const filteredTodos = filterHandler(searchedTodos);
@@ -322,3 +343,6 @@ $allTodoButton.addEventListener("click", () => setFilter("all"));
 $incompleteTodoButton.addEventListener("click", () => setFilter("incomplete"));
 $completeTodoButton.addEventListener("click", () => setFilter("complete"));
 $loadMoreButton.addEventListener("click", paginationHandler);
+$searchButton.addEventListener("click", toggleSearchBar);
+$createButton.addEventListener("click", showInputWrapper);
+$clearButton.addEventListener("click", () => clearInputField($todoInput));

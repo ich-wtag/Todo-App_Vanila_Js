@@ -24,6 +24,12 @@ strong {
     font-weight: 700;
 }
 
+input,
+button,
+textarea {
+    outline: none;
+}
+
 .button,
 .button-icon,
 .button-primary,

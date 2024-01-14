@@ -24,7 +24,7 @@
     <header class="header container">
         <h2 class="header__title">Add Tasks</h2>
         <div class="flex-between header__button-wrapper">
-            <button class="flex button-primary header__add-button"  type="button">
+            <button class="flex button-primary header__add-button"  type="button" id="createButton">
                 <img class="header__button-icon" src="./assets/plus-icon.png" alt="create a new task">
                 <span>Create</span>
             </button>
@@ -38,16 +38,16 @@
     </header>
 
    <main class="container task-wrapper" id="todo-list">
-        <div class="task">
+        <div class="task hide" id="input-wrapper">
             <textarea class="task__input" id="input-field" rows="3"></textarea>
             <div class="flex task__button-wrapper"> 
                 <button class="button-secondary" id="add-button">Add Task</button>
-                <button class="button-icon task__button">
+                <button class="button-icon task__button" id="clear-button">
                     <img class="task__button-icon" src="./assets/delete-icon.svg" alt="delete task">
                 </button>
             </div>
         </div>
-        <div class="task">
+        <!-- <div class="task">
             <h3 class="task__title">Complete Initial setup of the Todo App</h3>
             <strong class="task__created-at">
                 <span>Created At:</span>
@@ -66,11 +66,11 @@
             </div>
         </div>
         <div class="task">
-            <h3 class="task__title task-completed">Complete Initial setup of the Todo App</h3>
-            <strong class="task__created-at">
+            <h3 class="task__title--completed">Complete Initial setup of the Todo App</h3>
+            <p class="task__created-at">
                 <span>Created At:</span>
                 <span class="task__created-time">21.02.22</span>
-            </strong>
+            </p>
             <div class="flex task__button-wrapper"> 
                 <button class="button-icon hide task__button">
                     <img class="task__button-icon" src="./assets/tick-mark.svg" alt="mark done task">
@@ -82,9 +82,9 @@
                     <img class="task__button-icon" src="./assets/delete-icon.svg" alt="delete task">
                 </button> 
                 
-                <p class="task__completed-badge">Completed in 3 day</p>
+                <span class="task__completed-badge">Completed in 3 day</span>
             </div>
-        </div>
+        </div> -->
    </main>
 
     <!-- <div id="input-wrapper">
