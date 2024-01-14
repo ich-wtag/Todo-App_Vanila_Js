@@ -15,3 +15,7 @@ export const $completeTodoButton = document.getElementById(
     "complete-filter-button"
 );
 export const $loadMoreButton = document.querySelector(".load-more-button");
+export const $blankFieldWrapper = document.getElementById(
+    "blank-field-wrapper"
+);
+export const $blankTitle = document.querySelector(".task__title--blank");

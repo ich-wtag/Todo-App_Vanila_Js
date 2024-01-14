@@ -1,4 +1,9 @@
-import { $errorMessageElement } from "./element.js";
+import {
+    $allTodoButton,
+    $completeTodoButton,
+    $errorMessageElement,
+    $incompleteTodoButton,
+} from "./element.js";
 export const sanitizeInput = (value) => {
     return value.replace(/(<([^>]+)>)/gi, "");
 };
@@ -43,4 +48,16 @@ export const showFormattedDate = (dateString) => {
         month: "2-digit",
         year: "2-digit",
     });
+};
+
+export const activeFilterButton = () => {
+    $allTodoButton.classList.remove("button-inactive");
+    $incompleteTodoButton.classList.remove("button-inactive");
+    $completeTodoButton.classList.remove("button-inactive");
+};
+
+export const deactiveFilterButton = () => {
+    $allTodoButton.classList.add("button-inactive");
+    $incompleteTodoButton.classList.add("button-inactive");
+    $completeTodoButton.classList.add("button-inactive");
 };

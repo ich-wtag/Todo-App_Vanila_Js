@@ -12,6 +12,8 @@ import {
     $createButton,
     $inputWrapper,
     $clearButton,
+    $blankFieldWrapper,
+    $blankTitle,
 } from "./element.js";
 import {
     sanitizeInput,
@@ -21,6 +23,8 @@ import {
     addButtonClasses,
     showCompletedTime,
     showFormattedDate,
+    activeFilterButton,
+    deactiveFilterButton,
 } from "./utility.js";
 
 import {
@@ -30,11 +34,12 @@ import {
     EDITICON,
     DONEICON,
     PLUSICON,
+    ALL,
 } from "./const.js";
 
 let todos = [];
 
-let filterState = "all";
+let filterState = ALL;
 
 let endIndex = 9;
 const todosNeedToBeLoaded = 6;
@@ -331,6 +336,16 @@ const renderTodos = () => {
     const filteredTodos = filterHandler(searchedTodos);
 
     const paginatedTodos = getPaginatedArray(filteredTodos);
+
+    if (!paginatedTodos.length) {
+        filterState !== ALL &&
+            ($blankTitle.innerText = `You don't have any ${filterState}d tasks. Please add one.`);
+
+        deactiveFilterButton();
+        $todoList.appendChild($blankFieldWrapper);
+    } else {
+        activeFilterButton();
+    }
 
     paginatedTodos.forEach((todo) => {
         $todoList.appendChild(createTodoElement(todo));

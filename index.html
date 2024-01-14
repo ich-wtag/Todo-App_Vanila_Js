@@ -30,14 +30,15 @@
             </button>
 
             <div class="flex filter-button-wrapper">
-                <button class="button-secondary" id="all-filter-button">All</button>
-                <button class="button-secondary" id="incomplete-filter-button">Incomplete</button>
-                <button class="button-secondary" id="complete-filter-button">Complete</button>
+                <button class="button-secondary button-inactive" id="all-filter-button">All</button>
+                <button class="button-secondary button-inactive" id="incomplete-filter-button">Incomplete</button>
+                <button class="button-secondary button-inactive" id="complete-filter-button">Complete</button>
             </div>
         </div>
     </header>
 
    <main class="container task-wrapper" id="todo-list">
+    
         <div class="task hide" id="input-wrapper">
             <textarea class="task__input" id="input-field" rows="3"></textarea>
             <div class="flex task__button-wrapper"> 
@@ -47,57 +48,14 @@
                 </button>
             </div>
         </div>
-        <!-- <div class="task">
-            <h3 class="task__title">Complete Initial setup of the Todo App</h3>
-            <strong class="task__created-at">
-                <span>Created At:</span>
-                <span class="task__created-time">21.02.22</span>
-            </strong>
-            <div class="flex task__button-wrapper"> 
-                <button class="button-icon task__button">
-                    <img class="task__button-icon" src="./assets/tick-mark.svg" alt="mark done task">
-                </button>
-                <button class="button-icon task__button">
-                    <img class="task__button-icon" src="./assets/pencil-icon.svg" alt="edit update task">
-                </button>
-                <button class="button-icon task__button">
-                    <img class="task__button-icon" src="./assets/delete-icon.svg" alt="delete task">
-                </button>
-            </div>
+
+        <div class="task--blank" id="blank-field-wrapper">
+            <img class="task__blank-image" src="./assets/blank-image.png" alt="blank file">
+            <p class="task__title--blank">You didn’t add any task. Please add one.</p>
         </div>
-        <div class="task">
-            <h3 class="task__title--completed">Complete Initial setup of the Todo App</h3>
-            <p class="task__created-at">
-                <span>Created At:</span>
-                <span class="task__created-time">21.02.22</span>
-            </p>
-            <div class="flex task__button-wrapper"> 
-                <button class="button-icon hide task__button">
-                    <img class="task__button-icon" src="./assets/tick-mark.svg" alt="mark done task">
-                </button>
-                <button class="button-icon hide task__button">
-                    <img class="task__button-icon" src="./assets/pencil-icon.svg" alt="edit update task">
-                </button>
-                <button class="button-icon task__button">
-                    <img class="task__button-icon" src="./assets/delete-icon.svg" alt="delete task">
-                </button> 
-                
-                <span class="task__completed-badge">Completed in 3 day</span>
-            </div>
-        </div> -->
+        
    </main>
 
-    <!-- <div id="input-wrapper">
-        <input type="text" id="input-field">
-        <button type="button" id="add-button">Add Todo</button>
-    </div>
-    <div class="filter-button-container">
-        <button id="all-filter-button">All</button>
-        <button id="incomplete-filter-button">Incomplete</button>
-        <button id="complete-filter-button">Complete</button>
-    </div>
-    
-    <ol id="todo-list"></ol> -->
 
     <p class="error-message hide"></p>
 

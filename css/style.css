@@ -102,13 +102,14 @@ body {
     line-height: normal;
 }
 
-.task .task__title {
+.task .task__title,
+.task--blank .task__title--blank {
     font-size: 1.5rem;
     color: var(--var-black-color);
 }
+
 .task .task__title--completed {
     font-size: 1.5rem;
-    color: var(--var-black-color);
     color: var(--var-green-color);
     text-decoration: line-through;
 }
@@ -118,6 +119,7 @@ body {
     font-size: 0.88rem;
     color: var(--var-gray-color);
 }
+
 .task .task__input {
     width: 100%;
     padding: 0.28rem 0.51rem;
@@ -149,9 +151,24 @@ body {
     color: var(--var-white-color);
 }
 
+.task--blank {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    text-align: center;
+}
+
+.task--blank .task__blank-image {
+    object-fit: contain;
+    height: 14.81rem;
+    width: 13.31rem;
+    margin-bottom: 1rem;
+}
+
 .load-more-button {
-    /* margin-top: 3.56rem; */
-    margin: 3.56rem 0;
+    display: block;
+    margin: 3.56rem auto;
     padding: 0.56rem 1.25rem;
     font-size: 1rem;
     font-weight: 500;
@@ -161,39 +178,13 @@ body {
     border: none;
 }
 
-/* ol li {
-    margin: 20px 0;
-}
-
-ol li p {
-    display: inline-block;
-}
-
-ol li button {
-    margin-left: 10px;
-} */
-
 .hide {
     display: none;
 }
 
 .error-message {
+    margin: 3rem 0;
+    text-align: center;
     color: red;
     font-weight: 600;
 }
-
-/* .done-todo {
-    text-decoration: line-through;
-} */
-
-/* .search-wrapper {
-    margin-top: 20px;
-}
-
-.filter-button-wrapper {
-    margin: 20px;
-} */
-
-/* .load-more-button {
-    margin: 40px 20px;
-} */
