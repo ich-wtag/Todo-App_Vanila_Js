@@ -16,16 +16,20 @@ import {
     showCompletedTodo,
 } from "./utility.js";
 
-import { INCOMPLETE, COMPLETE } from "./const.js";
+import {
+    INCOMPLETE,
+    COMPLETE,
+    PAGE_LOAD_COUNT,
+    INITAIL_PAGE,
+} from "./const.js";
 
 let todos = [];
 
 let filterState = "all";
 
-let endIndex = 9;
-const todosNeedToBeLoaded = 6;
-let currentPage = 1;
-let totalPage = 1;
+const pageLoadCount = PAGE_LOAD_COUNT;
+let currentPage = INITAIL_PAGE;
+let totalPage = INITAIL_PAGE;
 
 const addTodoHandler = () => {
     const todoTitle = sanitizeInput($todoInput.value).trim();
@@ -167,20 +171,17 @@ const filterHandler = (tobeFilteredArray) => {
 
 const paginationHandler = () => {
     if (currentPage < totalPage) {
-        endIndex += todosNeedToBeLoaded;
         currentPage++;
     } else {
-        currentPage = 1;
-        endIndex = 9;
+        currentPage = INITAIL_PAGE;
     }
     renderTodos();
 };
 
-const getPaginatedArray = (toBePaginatedArray) => {
+const getPaginatedArray = (todos) => {
     const startIndex = 0;
-    totalPage = Math.round(
-        (toBePaginatedArray.length - 1) / todosNeedToBeLoaded
-    );
+    const endIndex = currentPage * pageLoadCount;
+    totalPage = INITAIL_PAGE + Math.floor((todos.length - 1) / pageLoadCount);
 
     if (totalPage > 1) {
         $loadMoreButton.classList.remove("hide");
@@ -190,7 +191,7 @@ const getPaginatedArray = (toBePaginatedArray) => {
     $loadMoreButton.textContent =
         currentPage < totalPage ? "Load More" : "Show Less";
 
-    return toBePaginatedArray?.slice(startIndex, endIndex);
+    return todos?.slice(startIndex, endIndex);
 };
 
 const createTodoElement = (todo) => {
