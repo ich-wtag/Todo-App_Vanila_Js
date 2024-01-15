@@ -1,8 +1,13 @@
+import { ALL } from "./const.js";
 import {
     $allTodoButton,
+    $blankFieldWrapper,
+    $blankTitle,
     $completeTodoButton,
     $errorMessageElement,
+    $filterButtonWrapper,
     $incompleteTodoButton,
+    $todoList,
 } from "./element.js";
 export const sanitizeInput = (value) => {
     return value.replace(/(<([^>]+)>)/gi, "");
@@ -50,14 +55,41 @@ export const showFormattedDate = (dateString) => {
     });
 };
 
-export const activeFilterButton = () => {
-    $allTodoButton.classList.remove("button-inactive");
-    $incompleteTodoButton.classList.remove("button-inactive");
-    $completeTodoButton.classList.remove("button-inactive");
+export const showBlankTaskWrapper = (todos, filterState) => {
+    if (!todos.length) {
+        filterState !== ALL &&
+            ($blankTitle.innerText = `You don't have any ${filterState} task. Please add one.`);
+
+        $todoList.appendChild($blankFieldWrapper);
+        return;
+    }
 };
 
-export const deactiveFilterButton = () => {
-    $allTodoButton.classList.add("button-inactive");
-    $incompleteTodoButton.classList.add("button-inactive");
-    $completeTodoButton.classList.add("button-inactive");
+const markButtonInactive = () => {
+    $allTodoButton.classList.remove("button-active");
+    $incompleteTodoButton.classList.remove("button-active");
+    $completeTodoButton.classList.remove("button-active");
+};
+
+export const activateFilterButton = (todos, filterState) => {
+    if (!todos.length) {
+        $allTodoButton.classList.add("button-inactive");
+        $incompleteTodoButton.classList.add("button-inactive");
+        $completeTodoButton.classList.add("button-inactive");
+        return;
+    } else {
+        filterState === ALL && $allTodoButton.classList.add("button-active");
+
+        $allTodoButton.classList.remove("button-inactive");
+        $incompleteTodoButton.classList.remove("button-inactive");
+        $completeTodoButton.classList.remove("button-inactive");
+    }
+};
+
+export const showActiveFilterButton = (e) => {
+    markButtonInactive();
+
+    if (e.target.tagName === "BUTTON") {
+        e.target.classList.add("button-active");
+    }
 };

@@ -13,7 +13,9 @@
     --var-violet-color-v400: #7a8dfd;
 }
 
-* {
+*,
+*::after,
+*::before {
     padding: 0;
     margin: 0;
     -webkit-box-sizing: border-box;

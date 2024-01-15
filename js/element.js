@@ -19,3 +19,6 @@ export const $blankFieldWrapper = document.getElementById(
     "blank-field-wrapper"
 );
 export const $blankTitle = document.querySelector(".task__title--blank");
+export const $filterButtonWrapper = document.querySelector(
+    ".filter-button-wrapper"
+);

@@ -14,6 +14,7 @@ import {
     $clearButton,
     $blankFieldWrapper,
     $blankTitle,
+    $filterButtonWrapper,
 } from "./element.js";
 import {
     sanitizeInput,
@@ -23,8 +24,9 @@ import {
     addButtonClasses,
     showCompletedTime,
     showFormattedDate,
-    activeFilterButton,
-    deactiveFilterButton,
+    activateFilterButton,
+    showBlankTaskWrapper,
+    showActiveFilterButton,
 } from "./utility.js";
 
 import {
@@ -287,7 +289,6 @@ const createTodoElement = (todo) => {
             $paragraphElement,
             $cancelButton,
             $deleteButton,
-
             todo
         )
     );
@@ -337,16 +338,9 @@ const renderTodos = () => {
 
     const paginatedTodos = getPaginatedArray(filteredTodos);
 
-    if (!paginatedTodos.length) {
-        filterState !== ALL &&
-            ($blankTitle.innerText = `You don't have any ${filterState}d tasks. Please add one.`);
+    showBlankTaskWrapper(paginatedTodos, filterState);
 
-        deactiveFilterButton();
-        $todoList.appendChild($blankFieldWrapper);
-    } else {
-        activeFilterButton();
-    }
-
+    activateFilterButton(todos, filterState);
     paginatedTodos.forEach((todo) => {
         $todoList.appendChild(createTodoElement(todo));
     });
@@ -361,3 +355,6 @@ $loadMoreButton.addEventListener("click", paginationHandler);
 $searchButton.addEventListener("click", toggleSearchBar);
 $createButton.addEventListener("click", showInputWrapper);
 $clearButton.addEventListener("click", () => clearInputField($todoInput));
+$filterButtonWrapper.addEventListener("click", (e) =>
+    showActiveFilterButton(e)
+);
