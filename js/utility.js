@@ -5,7 +5,6 @@ import {
     $blankTitle,
     $completeTodoButton,
     $errorMessageElement,
-    $filterButtonWrapper,
     $incompleteTodoButton,
     $todoList,
 } from "./element.js";
@@ -18,8 +17,28 @@ export const clearInputField = (inputElement) => {
 };
 
 export const showErrorMessage = (message) => {
-    $errorMessageElement.classList.remove("hide");
     $errorMessageElement.innerHTML = message;
+    $errorMessageElement.classList.remove("hide");
+
+    setTimeout(() => {
+        $errorMessageElement.classList.add("hide");
+    }, 1500);
+};
+
+export const showEditedTitle = (
+    editButton,
+    deleteButton,
+    inputElement,
+    cancelButton,
+    paragraphElement,
+    headingElement
+) => {
+    editButton.classList.toggle("button-secondary");
+    deleteButton.classList.toggle("hide");
+    inputElement.classList.toggle("hide");
+    cancelButton.classList.toggle("hide");
+    paragraphElement.classList.toggle("hide");
+    headingElement.classList.toggle("hide");
 };
 
 export const showCompletedTodo = (
