@@ -32,6 +32,8 @@ import {
 import {
     INCOMPLETE,
     COMPLETE,
+    PAGE_LOAD_COUNT,
+    INITAIL_PAGE,
     DELETEICON,
     EDITICON,
     DONEICON,
@@ -44,9 +46,9 @@ let todos = [];
 let filterState = ALL;
 
 let endIndex = 9;
-const todosNeedToBeLoaded = 6;
-let currentPage = 1;
-let totalPage = 1;
+const pageLoadCount = PAGE_LOAD_COUNT;
+let currentPage = INITAIL_PAGE;
+let totalPage = INITAIL_PAGE;
 
 const showInputWrapper = () => {
     if ($inputWrapper.classList.contains("hide")) {
@@ -196,20 +198,17 @@ const filterHandler = (tobeFilteredArray) => {
 
 const paginationHandler = () => {
     if (currentPage < totalPage) {
-        endIndex += todosNeedToBeLoaded;
         currentPage++;
     } else {
-        currentPage = 1;
-        endIndex = 9;
+        currentPage = INITAIL_PAGE;
     }
     renderTodos();
 };
 
-const getPaginatedArray = (toBePaginatedArray) => {
+const getPaginatedArray = (todos) => {
     const startIndex = 0;
-    totalPage = Math.round(
-        (toBePaginatedArray.length - 1) / todosNeedToBeLoaded
-    );
+    const endIndex = currentPage * pageLoadCount;
+    totalPage = INITAIL_PAGE + Math.floor((todos.length - 1) / pageLoadCount);
 
     if (totalPage > 1) {
         $loadMoreButton.classList.remove("hide");
@@ -219,7 +218,7 @@ const getPaginatedArray = (toBePaginatedArray) => {
     $loadMoreButton.textContent =
         currentPage < totalPage ? "Load More" : "Show Less";
 
-    return toBePaginatedArray?.slice(startIndex, endIndex);
+    return todos?.slice(startIndex, endIndex);
 };
 
 const createTodoElement = (todo) => {

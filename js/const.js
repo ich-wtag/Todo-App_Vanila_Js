@@ -1,6 +1,8 @@
 export const INCOMPLETE = "incomplete";
 export const COMPLETE = "complete";
 export const ALL = "all";
+export const INITAIL_PAGE = 1;
+export const PAGE_LOAD_COUNT = 9;
 export const DONEICON = `<svg class="task__button-icon" width="24" height="19" viewBox="0 0 24 19" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M20.285 0L9 11.567L3.714 6.556L0 10.272L9 19L24 3.715L20.285 0Z" fill="#BBBDD0"/>
 </svg>`;
