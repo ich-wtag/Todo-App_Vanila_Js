@@ -2,7 +2,6 @@ import {
     $addButton,
     $todoInput,
     $todoList,
-    $errorMessageElement,
     $searchInput,
     $allTodoButton,
     $completeTodoButton,
@@ -17,7 +16,7 @@ import {
 import {
     sanitizeInput,
     clearInputField,
-    showErrorMessage,
+    showToastMessage,
     showCompletedTodo,
     addButtonClasses,
     showCompletedTime,
@@ -38,6 +37,8 @@ import {
     DONEICON,
     PLUSICON,
     ALL,
+    ERROR,
+    SUCCESS,
 } from "./const.js";
 
 let todos = [];
@@ -61,13 +62,10 @@ const showInputWrapper = () => {
 const addTodoHandler = () => {
     const todoTitle = sanitizeInput($todoInput.value).trim();
     if (!todoTitle.length) {
-        showErrorMessage(
-            "You can not add a todo item without any title. Please add a title"
-        );
+        showToastMessage(ERROR, "You can not add a todo item without a title.");
         return;
     }
 
-    $errorMessageElement.classList.add("hide");
     todos.unshift({
         id: new Date().getTime(),
         title: todoTitle,
@@ -78,12 +76,16 @@ const addTodoHandler = () => {
     clearInputField($todoInput);
 
     clearInputField($searchInput);
+
+    showToastMessage(SUCCESS, "You have successfully added a todo item");
     renderTodos();
 };
 
 const deleteTodoHandler = (todoId) => {
     todos = todos.filter((todo) => todo.id !== todoId);
     clearInputField($searchInput);
+
+    showToastMessage(ERROR, "You have successfully deleted a todo item");
     renderTodos();
 };
 
@@ -101,17 +103,19 @@ const editTodoHandler = (
         inputElement.value = todo.title;
         todo.isEditing = true;
     } else if (todo.isEditing && !inputElement.value) {
-        showErrorMessage(
+        showToastMessage(
+            ERROR,
             "You can not update a todo without any title. Please add a title"
         );
 
         return;
     } else {
-        $errorMessageElement.classList.add("hide");
         editButton.innerHTML = EDITICON;
         headingElement.textContent = inputElement.value;
         todo.title = inputElement.value;
         todo.isEditing = false;
+
+        showToastMessage(SUCCESS, " You have successfully updated a todo item");
     }
 
     showEditedTitle(
@@ -144,19 +148,24 @@ const cancelEditingTodoHandler = (
         headingElement
     );
 
+    showToastMessage(SUCCESS, "You have successfully updated a todo item");
+
     editButton.innerHTML = EDITICON;
     todo.isEditing = false;
 };
 
 const markDoneTodoHandler = (inputElement, todo) => {
     if (!inputElement.value.trim()) {
-        showErrorMessage(
-            "You can not make done a todo without any title. Please add a title"
+        showToastMessage(
+            ERROR,
+            "You can not make done a todo without any title"
         );
         return;
     }
 
     clearInputField($searchInput);
+
+    showToastMessage(SUCCESS, "You have successfully completed a todo item");
 
     todo.title = sanitizeInput(inputElement.value).trim();
     todo.isCompleted = true;

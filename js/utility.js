@@ -1,12 +1,13 @@
-import { ALL } from "./const.js";
+import { ALL, DONEICON, SUCCESS } from "./const.js";
 import {
     $allTodoButton,
     $blankFieldWrapper,
     $blankTitle,
     $completeTodoButton,
-    $errorMessageElement,
+    $toastElement,
     $incompleteTodoButton,
     $todoList,
+    $toastSpanElement,
 } from "./element.js";
 export const sanitizeInput = (value) => {
     return value.replace(/(<([^>]+)>)/gi, "");
@@ -16,12 +17,24 @@ export const clearInputField = (inputElement) => {
     inputElement.value = "";
 };
 
-export const showErrorMessage = (message) => {
-    $errorMessageElement.innerHTML = message;
-    $errorMessageElement.classList.remove("hide");
+export const showToastMessage = (status, message) => {
+    $toastSpanElement.innerHTML = message;
+    $toastElement.innerHTML = "";
+    $toastElement.classList.remove("hide");
+    $toastElement.classList.remove("error-message");
+    $toastElement.classList.remove("success-message");
+
+    if (status === SUCCESS) {
+        $toastElement.classList.add("success-message");
+        $toastElement.innerHTML = DONEICON;
+    } else {
+        $toastElement.classList.add("error-message");
+    }
+
+    $toastElement.append($toastSpanElement);
 
     setTimeout(() => {
-        $errorMessageElement.classList.add("hide");
+        $toastElement.classList.add("hide");
     }, 1500);
 };
 
