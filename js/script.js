@@ -25,6 +25,7 @@ import {
     showBlankTaskWrapper,
     showActiveFilterButton,
     showEditedTitle,
+    markButtonInactive,
 } from "./utility.js";
 
 import {
@@ -173,9 +174,7 @@ const markDoneTodoHandler = (inputElement, todo) => {
     renderTodos();
 };
 
-const searchHandler = () => {
-    const searchedValue = $searchInput.value.toLowerCase().trim();
-
+const searchHandler = (searchedValue) => {
     if (searchedValue === "") {
         return todos;
     }
@@ -346,17 +345,23 @@ const createTodoElement = (todo) => {
 
 const renderTodos = () => {
     $todoList.innerHTML = "";
+    const searchedValue = $searchInput.value.toLowerCase().trim();
 
     if (!$inputWrapper.classList.contains("hide")) {
         $todoList.appendChild($inputWrapper);
     }
 
-    const searchedTodos = searchHandler();
+    const searchedTodos = searchHandler(searchedValue);
     const filteredTodos = filterHandler(searchedTodos);
 
     const paginatedTodos = getPaginatedArray(filteredTodos);
+    if (!todos.length) {
+        markButtonInactive();
+    }
 
-    showBlankTaskWrapper(paginatedTodos, filterState);
+    if (!paginatedTodos.length) {
+        showBlankTaskWrapper(searchedValue, filterState);
+    }
 
     activateFilterButton(todos, filterState);
 

@@ -1,4 +1,4 @@
-import { ALL, DONEICON, SUCCESS } from "./const.js";
+import { ALL, COMPLETE, DONEICON, INCOMPLETE, SUCCESS } from "./const.js";
 import {
     $allTodoButton,
     $blankFieldWrapper,
@@ -87,17 +87,20 @@ export const showFormattedDate = (dateString) => {
     });
 };
 
-export const showBlankTaskWrapper = (todos, filterState) => {
-    if (!todos.length) {
-        filterState !== ALL &&
-            ($blankTitle.innerText = `You don't have any ${filterState} task. Please add one.`);
-
-        $todoList.appendChild($blankFieldWrapper);
-        return;
+export const showBlankTaskWrapper = (searchedValue, filterState) => {
+    if (filterState !== ALL && !searchedValue.length) {
+        $blankTitle.innerText = `You don't have any ${filterState} task. Please add one.`;
+    } else if (searchedValue.length > 0) {
+        $blankTitle.innerText = `You don't have any task named : ${searchedValue}. Please add one.`;
+    } else {
+        $blankTitle.innerText = "You didn't add any task. Please add one.";
     }
+
+    $todoList.appendChild($blankFieldWrapper);
+    return;
 };
 
-const markButtonInactive = () => {
+export const markButtonInactive = () => {
     $allTodoButton.classList.remove("button-active");
     $incompleteTodoButton.classList.remove("button-active");
     $completeTodoButton.classList.remove("button-active");
@@ -109,13 +112,16 @@ export const activateFilterButton = (todos, filterState) => {
         $incompleteTodoButton.classList.add("button-inactive");
         $completeTodoButton.classList.add("button-inactive");
         return;
-    } else {
-        filterState === ALL && $allTodoButton.classList.add("button-active");
-
-        $allTodoButton.classList.remove("button-inactive");
-        $incompleteTodoButton.classList.remove("button-inactive");
-        $completeTodoButton.classList.remove("button-inactive");
+    } else if (todos.length && filterState === ALL) {
+        $allTodoButton.classList.add("button-active");
+    } else if (todos.length && filterState === INCOMPLETE) {
+        $incompleteTodoButton.classList.add("button-active");
+    } else if (todos.length && filterState === COMPLETE) {
+        $completeTodoButton.classList.add("button-active");
     }
+    $allTodoButton.classList.remove("button-inactive");
+    $incompleteTodoButton.classList.remove("button-inactive");
+    $completeTodoButton.classList.remove("button-inactive");
 };
 
 export const showActiveFilterButton = (e) => {
