@@ -1,5 +1,3 @@
-import { $inputWrapper } from "./element.js";
-
 export const INCOMPLETE = "incomplete";
 export const COMPLETE = "complete";
 export const ALL = "all";
