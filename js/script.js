@@ -347,6 +347,11 @@ const createTodoElement = (todo) => {
     return $todo;
 };
 
+const updateLocalStorageData = () => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+    localStorage.setItem("filterState", filterState);
+};
+
 const renderTodos = () => {
     $todoList.innerHTML = "";
     const searchedValue = $searchInput.value.toLowerCase().trim();
@@ -370,8 +375,7 @@ const renderTodos = () => {
 
     activateFilterButton(todos, filterState);
 
-    localStorage.setItem("todos", JSON.stringify(todos));
-    localStorage.setItem("filterState", filterState);
+    updateLocalStorageData();
 
     paginatedTodos.forEach((todo) => {
         $todoList.appendChild(createTodoElement(todo));
