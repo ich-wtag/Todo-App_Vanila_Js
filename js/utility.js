@@ -111,6 +111,8 @@ export const activateFilterButton = (todos, filterState) => {
         $allTodoButton.classList.add("button-inactive");
         $incompleteTodoButton.classList.add("button-inactive");
         $completeTodoButton.classList.add("button-inactive");
+
+        markButtonInactive();
         return;
     } else if (todos.length && filterState === ALL) {
         $allTodoButton.classList.add("button-active");

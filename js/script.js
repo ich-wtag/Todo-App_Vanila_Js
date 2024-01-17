@@ -25,7 +25,6 @@ import {
     showBlankTaskWrapper,
     showActiveFilterButton,
     showEditedTitle,
-    markButtonInactive,
 } from "./utility.js";
 
 import {
@@ -355,8 +354,9 @@ const renderTodos = () => {
     const filteredTodos = filterHandler(searchedTodos);
 
     const paginatedTodos = getPaginatedArray(filteredTodos);
+
     if (!todos.length) {
-        markButtonInactive();
+        filterState = ALL;
     }
 
     if (!paginatedTodos.length) {

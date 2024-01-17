@@ -35,26 +35,26 @@ body {
     border-bottom: 0.063rem solid var(--var-violet-color-v100);
 }
 
-.navbar .navbar__logo {
+.navbar__logo {
     gap: 0.86rem;
 }
 
-.navbar .navbar__logo .logo__image {
+.navbar__logo .logo__image {
     width: 2.25rem;
     height: 2.25rem;
 }
 
-.navbar .navbar__logo .logo__text {
+.navbar__logo .logo__text {
     font-size: 2.25rem;
     line-height: normal;
     color: var(--var-violet-color-v400);
 }
 
-.navbar .navbar__search-wrapper {
+.navbar__search-wrapper {
     gap: 0.86rem;
 }
 
-.navbar .navbar__search-wrapper .search__input {
+.navbar__search-wrapper .search__input {
     padding: 0.75rem 0.5rem;
     width: 32.38rem;
     height: 2.25rem;
@@ -66,26 +66,26 @@ body {
     margin-top: 4rem;
 }
 
-.header .header__title {
+.header__title {
     font-size: 1.88rem;
     color: var(--var-black-color);
 }
 
-.header .header__button-wrapper {
+.header__button-wrapper {
     margin-top: 1.75rem;
 }
 
-.header .header__add-button {
+.header__add-button {
     gap: 0.31rem;
     line-height: normal;
 }
 
-.header .header__button-icon {
+.header__button-icon {
     width: 1rem;
     height: 1rem;
 }
 
-.header .filter-button-wrapper {
+.filter-button-wrapper {
     gap: 1.19rem;
 }
 
@@ -108,7 +108,7 @@ body {
     line-height: normal;
 }
 
-.task .task__title {
+.task__title {
     display: -webkit-box;
     max-width: 100%;
     -webkit-line-clamp: 2;
@@ -117,25 +117,25 @@ body {
     overflow: hidden;
 }
 
-.task .task__title,
-.task--blank .task__title--blank {
+.task__title,
+.task__title--blank {
     font-size: 1.5rem;
     color: var(--var-black-color);
 }
 
-.task .task__title--completed {
+.task__title--completed {
     font-size: 1.5rem;
     color: var(--var-green-color);
     text-decoration: line-through;
 }
 
-.task .task__created-at {
+.task__created-at {
     margin-top: 0.56rem;
     font-size: 0.88rem;
     color: var(--var-gray-color);
 }
 
-.task .task__input {
+.task__input {
     width: 100%;
     padding: 0.28rem 0.51rem;
     resize: none;
@@ -147,7 +147,7 @@ body {
     color: var(--var-black-color);
 }
 
-.task .task__button-wrapper {
+.task__button-wrapper {
     position: absolute;
     width: 90%;
     left: 4.5%;
@@ -155,13 +155,13 @@ body {
     column-gap: 1.08rem;
 }
 
-.task .task__button .task__button-icon {
+.task__button-icon {
     fill: var(--var-gray-color);
     width: 1.5rem;
     height: 1.5rem;
 }
 
-.task .task__completed-badge {
+.task__completed-badge {
     padding: 0.31rem 0.75rem;
     margin-left: auto;
     font-size: 0.75rem;
@@ -179,7 +179,7 @@ body {
     text-align: center;
 }
 
-.task--blank .task__blank-image {
+.task__blank-image {
     object-fit: contain;
     height: 14.81rem;
     width: 13.31rem;
@@ -199,7 +199,7 @@ body {
 }
 
 .hide {
-    display: none !important;
+    display: none;
 }
 
 .success-message,

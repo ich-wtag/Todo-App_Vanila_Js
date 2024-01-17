@@ -1,25 +1,25 @@
 @media screen and (max-width: 991px) {
-    .navbar .navbar__logo {
+    .navbar__logo {
         gap: 0.3rem;
     }
-    .navbar .navbar__logo .logo__image {
+    .navbar__logo .logo__image {
         width: 1.8rem;
         height: 1.8rem;
     }
-    .navbar .navbar__logo .logo__text {
+    .navbar__logo .logo__text {
         font-size: 1.8rem;
     }
-    .navbar .navbar__search-wrapper .search__input {
+    .navbar__search-wrapper .search__input {
         max-width: 17.38rem;
     }
     .header {
         margin-top: 2.7rem;
     }
-    .header .header__title {
+    .header__title {
         font-size: 1.5rem;
     }
 
-    .header .filter-button-wrapper {
+    .filter-button-wrapper {
         gap: 0.8rem;
     }
 
@@ -28,12 +28,12 @@
         gap: 1.8rem;
     }
 
-    .task .task__title,
-    .task--blank .task__title--blank {
+    .task__title,
+    .task__title--blank {
         font-size: 1.2rem;
     }
 
-    .task .task__button-wrapper {
+    .task__button-wrapper {
         width: 88%;
         left: 6.5%;
     }
@@ -59,25 +59,25 @@
     .task-wrapper {
         grid-template-columns: repeat(1, 1fr);
     }
-    .navbar .navbar__search-wrapper {
+    .navbar__search-wrapper {
         width: 100%;
         justify-content: space-between;
     }
-    .navbar .navbar__search-wrapper .search__input {
+    .navbar__search-wrapper .search__input {
         order: 2;
         max-width: 19rem;
         height: 1.9rem;
     }
-    .navbar .navbar__search-wrapper .search__button {
+    .navbar__search-wrapper .search__button {
         height: 1.9rem;
     }
 
-    .header .header__button-icon {
+    .header__button-icon {
         width: 0.8rem;
         height: 0.8rem;
     }
 
-    .task .task__button-wrapper {
+    .task__button-wrapper {
         width: 90%;
         left: 5%;
     }
