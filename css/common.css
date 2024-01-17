@@ -1,0 +1,81 @@
+.container {
+    width: 100%;
+    max-width: 87.5rem;
+    margin: auto;
+    padding: 0 1.56rem;
+}
+
+.flex,
+.flex-between {
+    display: flex;
+    align-items: center;
+}
+
+.flex-between {
+    justify-content: space-between;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h5,
+strong {
+    font-weight: 700;
+}
+
+input,
+button,
+textarea {
+    outline: none;
+}
+
+.button,
+.button-icon,
+.button-primary,
+.button-secondary {
+    cursor: pointer;
+    font-weight: inherit;
+    border-radius: 0.31rem;
+}
+
+.button:active,
+.button-icon:active,
+.button-primary:active,
+.button-secondary:active {
+    transform: translateY(0.06rem);
+}
+
+.button-icon {
+    background: var(--var-white-color);
+    color: var(--var-gray-color);
+    border: none;
+}
+
+.button-primary {
+    padding: 0.56rem 1.06rem;
+    font-size: 1rem;
+    color: var(--var-white-color);
+    background: var(--var-violet-color-v400);
+    border: none;
+}
+
+.button-secondary {
+    font-size: 1rem;
+    line-height: 1.2rem;
+    padding: 0.56rem 0.81rem;
+    color: var(--var-black-color);
+    background: var(--var-white-color);
+    border: 0.06rem solid var(--var-violet-color-v100);
+}
+
+.button-inactive {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.button-active {
+    color: var(--var-white-color);
+    background: var(--var-violet-color-v400);
+}

@@ -1,0 +1,236 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+@import "./common.css";
+
+:root {
+    --var-white-color: #fff;
+    --var-black-color: #32394b;
+    --var-gray-color: #bbbdd0;
+    --var-green-color: #0bc375;
+    --var-red-color: #e85f5f;
+
+    --var-violet-color-v50: #f8f9ff;
+    --var-violet-color-v100: #dde2ff;
+    --var-violet-color-v200: #d1d8ff;
+    --var-violet-color-v400: #7a8dfd;
+}
+
+*,
+*::after,
+*::before {
+    padding: 0;
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+}
+
+body {
+    font-weight: 500;
+    background-color: var(--var-violet-color-v50);
+}
+
+.navbar {
+    padding: 1.19rem 0;
+    background: var(--var-white-color);
+    border-bottom: 0.063rem solid var(--var-violet-color-v100);
+}
+
+.navbar__logo {
+    gap: 0.86rem;
+}
+
+.navbar__logo .logo__image {
+    width: 2.25rem;
+    height: 2.25rem;
+}
+
+.navbar__logo .logo__text {
+    font-size: 2.25rem;
+    line-height: normal;
+    color: var(--var-violet-color-v400);
+}
+
+.navbar__search-wrapper {
+    gap: 0.86rem;
+}
+
+.navbar__search-wrapper .search__input {
+    padding: 0.75rem 0.5rem;
+    width: 32.38rem;
+    height: 2.25rem;
+    border: 0.165rem solid var(--var-violet-color-v200);
+    border-radius: 0.312rem;
+}
+
+.header {
+    margin-top: 4rem;
+}
+
+.header__title {
+    font-size: 1.88rem;
+    color: var(--var-black-color);
+}
+
+.header__button-wrapper {
+    margin-top: 1.75rem;
+}
+
+.header__add-button {
+    gap: 0.31rem;
+    line-height: normal;
+}
+
+.header__button-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.filter-button-wrapper {
+    gap: 1.19rem;
+}
+
+.task-wrapper {
+    margin-top: 2.12rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3.2rem;
+    padding-bottom: 2.5rem;
+}
+
+.task {
+    position: relative;
+    min-height: 10.32rem;
+    padding: 0.94rem;
+    border-radius: 0.31rem;
+    background: var(--var-white-color);
+    border: 0.06rem solid var(--var-violet-color-v100);
+    line-height: normal;
+}
+
+.task__title {
+    display: -webkit-box;
+    width: 100%;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.task__title,
+.task__title--blank {
+    font-size: 1.5rem;
+    color: var(--var-black-color);
+}
+
+.task__title--completed {
+    font-size: 1.5rem;
+    color: var(--var-green-color);
+    text-decoration: line-through;
+}
+
+.task__created-at {
+    margin-top: 0.56rem;
+    font-size: 0.88rem;
+    color: var(--var-gray-color);
+}
+
+.task__input {
+    width: 100%;
+    padding: 0.28rem 0.51rem;
+    resize: none;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: normal;
+    border: 0.19rem solid var(--var-violet-color-v100);
+    border-radius: 0.31rem;
+    color: var(--var-black-color);
+}
+
+.task__button-wrapper {
+    position: absolute;
+    width: 90%;
+    left: 4.5%;
+    bottom: 1rem;
+    column-gap: 1.08rem;
+}
+
+.task__button-icon {
+    fill: var(--var-gray-color);
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.task__completed-badge {
+    padding: 0.31rem 0.75rem;
+    margin-left: auto;
+    font-size: 0.75rem;
+    border-radius: 0.31rem;
+    background: var(--var-violet-color-v400);
+    color: var(--var-white-color);
+}
+
+.task--blank {
+    z-index: -1;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    text-align: center;
+}
+
+.task__blank-image {
+    height: fit-content;
+    width: 13.31rem;
+    margin: 0 auto 1.4rem;
+}
+
+.task__blank-image .blank-image {
+    cursor: pointer;
+    width: 100%;
+    object-fit: contain;
+}
+
+.load-more-button {
+    display: block;
+    margin: 3.56rem auto;
+    padding: 0.56rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--var-white-color);
+    background: var(--var-black-color);
+    border-radius: 0.31rem;
+    border: none;
+}
+
+.hide {
+    display: none;
+}
+
+.success-message,
+.error-message {
+    padding: 1.06rem 3.5rem;
+    position: fixed;
+    top: 7rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.12rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--var-white-color);
+    border-radius: 0.31rem;
+}
+
+.error-message {
+    background: var(--var-red-color);
+}
+
+.success-message {
+    background: var(--var-green-color);
+    gap: 0.4rem;
+}
+
+.success-message .task__button-icon {
+    fill: var(--var-white-color);
+    width: 1em;
+    height: 1em;
+}

@@ -5,30 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo App-Vanilla JS</title>
 
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/responsive.css">
 </head>
 <body>
-    <div class="search-container">
-        <input type="text" id="search-input">
-        <button id="search-button">search</button>
-    </div>
+    <nav class="navbar">
+        <div class="container flex-between">
+            <div class="flex navbar__logo">
+                <img class="logo__image" src="./assets/leaf.png" alt="Logo">
+                <h1 class="logo__text">Todos</h1>
+            </div>
+            <div class="flex navbar__search-wrapper">
+                <input class="hide search__input" type="text" >
+                <button class="flex button-icon search__button" ><img src="./assets/search-icon.svg" alt="Search Icon"></button>
+            </div>
+        </div>
+    </nav>
+  
+    <header class="header container">
+        <h2 class="header__title">Add Tasks</h2>
+        <div class="flex-between header__button-wrapper">
+            <button class="flex button-primary header__add-button"  type="button" id="createButton">
+                <img class="header__button-icon" src="./assets/plus-icon.png" alt="create a new task">
+                <span>Create</span>
+            </button>
 
-    <h1>Add Todos</h1>
-    <div id="input-container">
-        <input type="text" id="input-field">
-        <button type="button" id="add-button">Add Todo</button>
-    </div>
-    <div class="filter-button-container">
-        <button id="all-filter-button">All</button>
-        <button id="incomplete-filter-button">Incomplete</button>
-        <button id="complete-filter-button">Complete</button>
-    </div>
-    <ol id="todo-list"></ol>
+            <div class="flex filter-button-wrapper">
+                <button class="button-secondary button-inactive" id="all-filter-button">All</button>
+                <button class="button-secondary button-inactive" id="incomplete-filter-button">Incomplete</button>
+                <button class="button-secondary button-inactive" id="complete-filter-button">Complete</button>
+            </div>
+        </div>
+    </header>
 
-    <p class="error-message hide"></p>
+   <main class="container task-wrapper" id="todo-list">
+    
+        <div class="task hide" id="input-wrapper">
+            <textarea class="task__input" id="input-field" rows="3"></textarea>
+            <div class="flex task__button-wrapper"> 
+                <button class="button-secondary" id="add-button">Add Task</button>
+                <button class="button-icon task__button" id="clear-button">
+                    <img class="task__button-icon" src="./assets/delete-icon.svg" alt="delete task">
+                </button>
+            </div>
+        </div>
+
+        <div class="task--blank" id="blank-field-wrapper">
+            <div class="task__blank-image">
+                <img class="blank-image" src="./assets/blank-image.png" alt="blank file">
+            </div>
+            <p class="task__title--blank">You didn’t add any task. Please add one.</p>
+        </div>
+        
+   </main>
+
+
+    <p class="flex hide" id="toast"> <span></span></p>
 
     <button class="load-more-button hide"></button>
 
-    <script type="module" src="./script.js"></script>
+    <script type="module" src="./js/script.js"></script>
 </body>
 </html>
