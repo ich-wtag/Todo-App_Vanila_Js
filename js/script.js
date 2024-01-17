@@ -51,8 +51,12 @@ const pageLoadCount = PAGE_LOAD_COUNT;
 let currentPage = INITIAL_PAGE;
 let totalPage = INITIAL_PAGE;
 
+let isTaskInputVisible = false;
+
 const showInputWrapper = () => {
-    if ($inputWrapper.classList.contains("hide")) {
+    isTaskInputVisible = $inputWrapper.classList.contains("hide");
+
+    if (isTaskInputVisible) {
         $createButton.innerText = "Hide";
     } else {
         $createButton.innerHTML = `${PLUS_ICON} Create`;
@@ -347,9 +351,16 @@ const createTodoElement = (todo) => {
     return $todo;
 };
 
-const updateLocalStorageData = () => {
+const updateLocalStorageData = (searchedValue) => {
+    const state = {
+        filterState,
+        searchedValue,
+        currentPage,
+        isTaskInputVisible,
+    };
+
     localStorage.setItem("todos", JSON.stringify(todos));
-    localStorage.setItem("filterState", filterState);
+    localStorage.setItem("state", JSON.stringify(state));
 };
 
 const renderTodos = () => {
@@ -375,7 +386,7 @@ const renderTodos = () => {
 
     activateFilterButton(todos, filterState);
 
-    updateLocalStorageData();
+    updateLocalStorageData(searchedValue);
 
     paginatedTodos.forEach((todo) => {
         $todoList.appendChild(createTodoElement(todo));
@@ -384,13 +395,25 @@ const renderTodos = () => {
 
 const getLocalStorageData = () => {
     const data = JSON.parse(localStorage.getItem("todos"));
-    const state = localStorage.getItem("filterState");
+    const state = JSON.parse(localStorage.getItem("state"));
 
     if (data?.length > 0) {
         todos = [...data];
     }
 
-    filterState = state;
+    filterState = state?.filterState;
+    $searchInput.value = state?.searchedValue;
+    currentPage = state?.currentPage;
+    isTaskInputVisible = state?.isTaskInputVisible;
+
+    if (state?.searchedValue.length) {
+        toggleSearchBar();
+    }
+    if (isTaskInputVisible) {
+        showInputWrapper();
+        return;
+    }
+
     renderTodos();
 };
 
