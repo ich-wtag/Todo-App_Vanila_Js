@@ -7,6 +7,7 @@ import {
     $allTodoButton,
     $completeTodoButton,
     $incompleteTodoButton,
+    $loadMoreButton,
 } from "./element.js";
 import {
     sanitizeInput,
@@ -15,11 +16,20 @@ import {
     showCompletedTodo,
 } from "./utility.js";
 
-import { INCOMPLETE, COMPLETE } from "./const.js";
+import {
+    INCOMPLETE,
+    COMPLETE,
+    PAGE_LOAD_COUNT,
+    INITAIL_PAGE,
+} from "./const.js";
 
 let todos = [];
 
 let filterState = "all";
+
+const pageLoadCount = PAGE_LOAD_COUNT;
+let currentPage = INITAIL_PAGE;
+let totalPage = INITAIL_PAGE;
 
 const addTodoHandler = () => {
     const todoTitle = sanitizeInput($todoInput.value).trim();
@@ -62,7 +72,7 @@ const editTodoHandler = (
         $buttonElement.innerText = "Update";
         inputElement.value = todo.title;
         todo.isEditing = true;
-    } else if (todo.isEditing && !inputElement.value.trim()) {
+    } else if (todo.isEditing && !inputElement.value) {
         showErrorMessage(
             "You can not update an todo without any title. Please add a title"
         );
@@ -71,8 +81,8 @@ const editTodoHandler = (
     } else {
         $errorMessageElement.classList.add("hide");
         $buttonElement.innerText = "Edit";
-        paragraphElement.textContent = sanitizeInput(inputElement.value).trim();
-        todo.title = sanitizeInput(inputElement.value).trim();
+        paragraphElement.textContent = inputElement.value;
+        todo.title = inputElement.value;
         todo.isEditing = false;
     }
 
@@ -159,6 +169,31 @@ const filterHandler = (tobeFilteredArray) => {
     }
 };
 
+const paginationHandler = () => {
+    if (currentPage < totalPage) {
+        currentPage++;
+    } else {
+        currentPage = INITAIL_PAGE;
+    }
+    renderTodos();
+};
+
+const getPaginatedArray = (todos) => {
+    const startIndex = 0;
+    const endIndex = currentPage * pageLoadCount;
+    totalPage = INITAIL_PAGE + Math.floor((todos.length - 1) / pageLoadCount);
+
+    if (totalPage > 1) {
+        $loadMoreButton.classList.remove("hide");
+    } else {
+        $loadMoreButton.classList.add("hide");
+    }
+    $loadMoreButton.textContent =
+        currentPage < totalPage ? "Load More" : "Show Less";
+
+    return todos?.slice(startIndex, endIndex);
+};
+
 const createTodoElement = (todo) => {
     const $todo = document.createElement("li");
     const $paragraphElement = document.createElement("p");
@@ -234,7 +269,9 @@ const renderTodos = () => {
     const searchedTodos = searchHandler();
     const filteredTodos = filterHandler(searchedTodos);
 
-    filteredTodos.forEach((todo) => {
+    const paginatedTodos = getPaginatedArray(filteredTodos);
+
+    paginatedTodos.forEach((todo) => {
         $todoList.appendChild(createTodoElement(todo));
     });
 };
@@ -244,3 +281,4 @@ $searchInput.addEventListener("input", () => renderTodos());
 $allTodoButton.addEventListener("click", () => setFilter("all"));
 $incompleteTodoButton.addEventListener("click", () => setFilter("incomplete"));
 $completeTodoButton.addEventListener("click", () => setFilter("complete"));
+$loadMoreButton.addEventListener("click", paginationHandler);

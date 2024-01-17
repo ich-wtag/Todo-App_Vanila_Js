@@ -11,3 +11,4 @@ export const $incompleteTodoButton = document.getElementById(
 export const $completeTodoButton = document.getElementById(
     "complete-filter-button"
 );
+export const $loadMoreButton = document.querySelector(".load-more-button");
