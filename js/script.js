@@ -82,6 +82,7 @@ const addTodoHandler = () => {
     clearInputField($searchInput);
 
     showToastMessage(SUCCESS, "You have successfully added a todo item");
+
     renderTodos();
 };
 
@@ -369,10 +370,27 @@ const renderTodos = () => {
 
     activateFilterButton(todos, filterState);
 
+    localStorage.setItem("todos", JSON.stringify(todos));
+    localStorage.setItem("filterState", filterState);
+
     paginatedTodos.forEach((todo) => {
         $todoList.appendChild(createTodoElement(todo));
     });
 };
+
+const getLocalStorageData = () => {
+    const data = JSON.parse(localStorage.getItem("todos"));
+    const state = localStorage.getItem("filterState");
+
+    if (data?.length > 0) {
+        todos = [...data];
+    }
+
+    filterState = state;
+    renderTodos();
+};
+
+getLocalStorageData();
 
 $addButton.addEventListener("click", addTodoHandler);
 $searchInput.addEventListener("input", () => renderTodos());
