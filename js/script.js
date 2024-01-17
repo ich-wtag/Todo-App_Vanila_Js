@@ -12,6 +12,8 @@ import {
     $inputWrapper,
     $clearButton,
     $filterButtonWrapper,
+    $blankFieldWrapper,
+    $blankFieldImage,
 } from "./element.js";
 import {
     sanitizeInput,
@@ -31,11 +33,11 @@ import {
     INCOMPLETE,
     COMPLETE,
     PAGE_LOAD_COUNT,
-    INITAIL_PAGE,
-    DELETEICON,
-    EDITICON,
-    DONEICON,
-    PLUSICON,
+    INITIAL_PAGE,
+    DELETE_ICON,
+    EDIT_ICON,
+    DONE_ICON,
+    PLUS_ICON,
     ALL,
     ERROR,
     SUCCESS,
@@ -46,15 +48,17 @@ let todos = [];
 let filterState = ALL;
 
 const pageLoadCount = PAGE_LOAD_COUNT;
-let currentPage = INITAIL_PAGE;
-let totalPage = INITAIL_PAGE;
+let currentPage = INITIAL_PAGE;
+let totalPage = INITIAL_PAGE;
 
 const showInputWrapper = () => {
     if ($inputWrapper.classList.contains("hide")) {
         $createButton.innerText = "Hide";
     } else {
-        $createButton.innerHTML = `${PLUSICON} Create`;
+        $createButton.innerHTML = `${PLUS_ICON} Create`;
     }
+
+    $blankFieldWrapper.classList.toggle("hide");
     $inputWrapper.classList.toggle("hide");
     renderTodos();
 };
@@ -110,7 +114,7 @@ const editTodoHandler = (
 
         return;
     } else {
-        editButton.innerHTML = EDITICON;
+        editButton.innerHTML = EDIT_ICON;
         headingElement.textContent = inputElement.value;
         todo.title = inputElement.value;
         todo.isEditing = false;
@@ -148,9 +152,9 @@ const cancelEditingTodoHandler = (
         headingElement
     );
 
-    showToastMessage(SUCCESS, "You have successfully updated a todo item");
+    showToastMessage(ERROR, "You have canceled to update");
 
-    editButton.innerHTML = EDITICON;
+    editButton.innerHTML = EDIT_ICON;
     todo.isEditing = false;
 };
 
@@ -208,7 +212,7 @@ const paginationHandler = () => {
     if (currentPage < totalPage) {
         currentPage++;
     } else {
-        currentPage = INITAIL_PAGE;
+        currentPage = INITIAL_PAGE;
     }
     renderTodos();
 };
@@ -220,11 +224,11 @@ const getPaginatedArray = (todos) => {
         : currentPage * pageLoadCount - 1;
 
     const pageAdjustmentCount = $inputWrapper.classList.contains("hide")
-        ? INITAIL_PAGE
+        ? INITIAL_PAGE
         : 0;
 
     totalPage =
-        INITAIL_PAGE +
+        INITIAL_PAGE +
         Math.floor((todos.length - pageAdjustmentCount) / pageLoadCount);
 
     if (totalPage > 1) {
@@ -269,13 +273,13 @@ const createTodoElement = (todo) => {
     )}`;
     $inputElement.value = todo.title;
 
-    $deleteButton.innerHTML = DELETEICON;
+    $deleteButton.innerHTML = DELETE_ICON;
 
-    $editButton.innerHTML = EDITICON;
+    $editButton.innerHTML = EDIT_ICON;
 
-    $doneButton.innerHTML = DONEICON;
+    $doneButton.innerHTML = DONE_ICON;
 
-    $cancelButton.innerHTML = DELETEICON;
+    $cancelButton.innerHTML = DELETE_ICON;
 
     $completdBadgeElement.innerHTML = `Completed in ${todo.completedAt}`;
     $spanElement.innerText = todo.completedAt > 1 ? " days" : " day";
@@ -382,3 +386,4 @@ $clearButton.addEventListener("click", () => clearInputField($todoInput));
 $filterButtonWrapper.addEventListener("click", (e) =>
     showActiveFilterButton(e)
 );
+$blankFieldImage.addEventListener("click", showInputWrapper);

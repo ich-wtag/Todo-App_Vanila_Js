@@ -25,7 +25,7 @@
 
     .task-wrapper {
         grid-template-columns: repeat(2, 1fr);
-        gap: 1.8rem;
+        gap: 2.1rem;
     }
 
     .task__title,
@@ -48,6 +48,12 @@
     .success-message,
     .error-message {
         align-items: flex-start;
+    }
+
+    .task__blank-image {
+        height: fit-content;
+        width: 11.31rem;
+        margin: 0 auto 1rem;
     }
 }
 @media screen and (max-width: 480px) {
@@ -80,6 +86,11 @@
     .task__button-wrapper {
         width: 90%;
         left: 5%;
+    }
+
+    .task__blank-image {
+        width: 10rem;
+        margin: 0 auto 1rem;
     }
 
     .success-message,

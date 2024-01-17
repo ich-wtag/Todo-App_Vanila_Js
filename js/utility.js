@@ -1,4 +1,4 @@
-import { ALL, COMPLETE, DONEICON, INCOMPLETE, SUCCESS } from "./const.js";
+import { ALL, COMPLETE, DONE_ICON, INCOMPLETE, SUCCESS } from "./const.js";
 import {
     $allTodoButton,
     $blankFieldWrapper,
@@ -26,7 +26,7 @@ export const showToastMessage = (status, message) => {
 
     if (status === SUCCESS) {
         $toastElement.classList.add("success-message");
-        $toastElement.innerHTML = DONEICON;
+        $toastElement.innerHTML = DONE_ICON;
     } else {
         $toastElement.classList.add("error-message");
     }
