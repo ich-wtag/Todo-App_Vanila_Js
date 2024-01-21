@@ -66,11 +66,10 @@ export const showCompletedTodo = (
     completdBadgeElement.classList.remove("hide");
 };
 
-export const showCompletedTime = (createdAt) => {
-    const completedTimeSpan = new Date().getTime();
+export const showCompletedTime = (createdAt, completedAt) => {
+    const completedTimeSpan = new Date(completedAt).getTime();
     const createdTimeSpan = new Date(createdAt).getTime();
-
-    const totalDayTime = 24 * 60 * 60;
+    const totalDayTime = 24 * 60 * 60 * 1000;
 
     return Math.ceil((completedTimeSpan - createdTimeSpan) / totalDayTime);
 };

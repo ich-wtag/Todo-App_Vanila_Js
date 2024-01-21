@@ -180,7 +180,7 @@ const markDoneTodoHandler = (inputElement, todo) => {
 
     todo.title = sanitizeInput(inputElement.value).trim();
     todo.isCompleted = true;
-    todo.completedAt = showCompletedTime(todo.createdAt);
+    todo.completedAt = new Date().toUTCString();
     renderTodos();
 };
 
@@ -288,16 +288,20 @@ const createTodoElement = (todo) => {
 
     $cancelButton.innerHTML = DELETE_ICON;
 
-    $completdBadgeElement.innerHTML = `Completed in ${todo.completedAt}`;
-    $spanElement.innerText = todo.completedAt > 1 ? " days" : " day";
-
-    $completdBadgeElement.append($spanElement);
-
     $completdBadgeElement.classList.add("task__completed-badge", "hide");
     $cancelButton.classList.add("hide");
     $inputElement.classList.add("hide");
 
     if (todo.isCompleted) {
+        const completedDuration = showCompletedTime(
+            todo.createdAt,
+            todo.completedAt
+        );
+        $completdBadgeElement.innerHTML = `Completed in ${completedDuration}`;
+
+        $spanElement.innerText = completedDuration > 1 ? " days" : " day";
+
+        $completdBadgeElement.append($spanElement);
         showCompletedTodo(
             $headingElement,
             $editButton,
