@@ -29,6 +29,7 @@ import {
     showEditedTitle,
     getTodos,
     getStates,
+    debounce,
 } from "./utility.js";
 
 import {
@@ -184,16 +185,6 @@ const markDoneTodoHandler = (inputElement, todo) => {
     todo.completedAt = new Date().toUTCString();
     renderTodos();
 };
-
-function debounce (func, timeout = 500){
-    let timer;
-    return (...args) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            func.apply(this,args);
-        }, timeout);
-    };
-}
 
 const getSearchedValue =() => {
     searchedValue = $searchInput.value.toLowerCase().trim();
