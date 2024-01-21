@@ -132,3 +132,30 @@ export const showActiveFilterButton = (e) => {
         e.target.classList.add("button-active");
     }
 };
+
+export function getTodos() {
+    const payload = {
+        todos: [],
+        error: null,
+    };
+    try {
+        payload.todos = JSON.parse(localStorage.getItem("todos"));
+    } catch (error) {
+        payload.error = error;
+    } finally {
+        return payload;
+    }
+}
+export function getStates() {
+    const payload = {
+        state: {},
+        error: null,
+    };
+    try {
+        payload.state = JSON.parse(localStorage.getItem("state"));
+    } catch (error) {
+        payload.error = error;
+    } finally {
+        return payload;
+    }
+}

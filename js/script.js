@@ -27,6 +27,8 @@ import {
     showBlankTaskWrapper,
     showActiveFilterButton,
     showEditedTitle,
+    getTodos,
+    getStates,
 } from "./utility.js";
 
 import {
@@ -51,8 +53,12 @@ const pageLoadCount = PAGE_LOAD_COUNT;
 let currentPage = INITIAL_PAGE;
 let totalPage = INITIAL_PAGE;
 
+let isTaskInputVisible = false;
+
 const showInputWrapper = () => {
-    if ($inputWrapper.classList.contains("hide")) {
+    isTaskInputVisible = $inputWrapper.classList.contains("hide");
+
+    if (isTaskInputVisible) {
         $createButton.innerText = "Hide";
     } else {
         $createButton.innerHTML = `${PLUS_ICON} Create`;
@@ -82,6 +88,7 @@ const addTodoHandler = () => {
     clearInputField($searchInput);
 
     showToastMessage(SUCCESS, "You have successfully added a todo item");
+
     renderTodos();
 };
 
@@ -350,6 +357,18 @@ const createTodoElement = (todo) => {
     return $todo;
 };
 
+const updateLocalStorageData = (searchedValue) => {
+    const state = {
+        filterState,
+        searchedValue,
+        currentPage,
+        isTaskInputVisible,
+    };
+
+    localStorage.setItem("todos", JSON.stringify(todos));
+    localStorage.setItem("state", JSON.stringify(state));
+};
+
 const renderTodos = () => {
     $todoList.innerHTML = "";
     const searchedValue = $searchInput.value.toLowerCase().trim();
@@ -373,10 +392,46 @@ const renderTodos = () => {
 
     activateFilterButton(todos, filterState);
 
+    updateLocalStorageData(searchedValue);
+
     paginatedTodos.forEach((todo) => {
         $todoList.appendChild(createTodoElement(todo));
     });
 };
+
+const getLocalStorageData = () => {
+    const { todos: data, error: dataError } = getTodos();
+    const { state, error } = getStates();
+
+    if (dataError || error) {
+        showToastMessage(
+            ERROR,
+            "Some error occured. Please try again after some time."
+        );
+        return;
+    }
+
+    if (data?.length > 0) {
+        todos = [...data];
+    }
+
+    filterState = state?.filterState;
+    $searchInput.value = state?.searchedValue || "";
+    currentPage = state?.currentPage || currentPage;
+    isTaskInputVisible = state?.isTaskInputVisible || isTaskInputVisible;
+
+    if (state?.searchedValue.length) {
+        toggleSearchBar();
+    }
+    if (isTaskInputVisible) {
+        showInputWrapper();
+        return;
+    }
+
+    renderTodos();
+};
+
+getLocalStorageData();
 
 $addButton.addEventListener("click", addTodoHandler);
 $searchInput.addEventListener("input", () => renderTodos());
