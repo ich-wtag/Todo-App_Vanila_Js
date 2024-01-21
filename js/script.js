@@ -185,12 +185,12 @@ const markDoneTodoHandler = (inputElement, todo) => {
     renderTodos();
 };
 
-const debounce =(func, timeout = 500) => {
+function debounce (func, timeout = 500){
     let timer;
-    return () => {
+    return (...args) => {
         clearTimeout(timer);
         timer = setTimeout(() => {
-            func();
+            func.apply(this,args);
         }, timeout);
     };
 }
