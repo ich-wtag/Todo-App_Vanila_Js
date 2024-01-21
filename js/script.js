@@ -27,6 +27,8 @@ import {
     showBlankTaskWrapper,
     showActiveFilterButton,
     showEditedTitle,
+    getTodos,
+    getStates,
 } from "./utility.js";
 
 import {
@@ -394,17 +396,25 @@ const renderTodos = () => {
 };
 
 const getLocalStorageData = () => {
-    const data = JSON.parse(localStorage.getItem("todos"));
-    const state = JSON.parse(localStorage.getItem("state"));
+    const { todos: data, error: dataError } = getTodos();
+    const { state, error } = getStates();
+
+    if (dataError || error) {
+        showToastMessage(
+            ERROR,
+            "Some error occured. Please try again after some time."
+        );
+        return;
+    }
 
     if (data?.length > 0) {
         todos = [...data];
     }
 
     filterState = state?.filterState;
-    $searchInput.value = state?.searchedValue;
-    currentPage = state?.currentPage;
-    isTaskInputVisible = state?.isTaskInputVisible;
+    $searchInput.value = state?.searchedValue || "";
+    currentPage = state?.currentPage || currentPage;
+    isTaskInputVisible = state?.isTaskInputVisible || isTaskInputVisible;
 
     if (state?.searchedValue.length) {
         toggleSearchBar();
