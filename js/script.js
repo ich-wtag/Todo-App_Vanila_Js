@@ -29,6 +29,7 @@ import {
     showEditedTitle,
     getTodos,
     getStates,
+    debounce,
 } from "./utility.js";
 
 import {
@@ -46,6 +47,7 @@ import {
 } from "./const.js";
 
 let todos = [];
+let searchedValue = "";
 
 let filterState = ALL;
 
@@ -184,7 +186,13 @@ const markDoneTodoHandler = (inputElement, todo) => {
     renderTodos();
 };
 
-const searchHandler = (searchedValue) => {
+const getSearchedValue =() => {
+    searchedValue = $searchInput.value.toLowerCase().trim();
+    renderTodos();
+}
+const searchHandler = debounce(() => getSearchedValue());
+
+const getSearchedTodos = () => {
     if (searchedValue === "") {
         return todos;
     }
@@ -357,7 +365,7 @@ const createTodoElement = (todo) => {
     return $todo;
 };
 
-const updateLocalStorageData = (searchedValue) => {
+const updateLocalStorageData = () => {
     const state = {
         filterState,
         searchedValue,
@@ -371,13 +379,11 @@ const updateLocalStorageData = (searchedValue) => {
 
 const renderTodos = () => {
     $todoList.innerHTML = "";
-    const searchedValue = $searchInput.value.toLowerCase().trim();
-
     if (!$inputWrapper.classList.contains("hide")) {
         $todoList.appendChild($inputWrapper);
     }
 
-    const searchedTodos = searchHandler(searchedValue);
+    const searchedTodos = getSearchedTodos();
     const filteredTodos = filterHandler(searchedTodos);
 
     const paginatedTodos = getPaginatedArray(filteredTodos);
@@ -392,7 +398,7 @@ const renderTodos = () => {
 
     activateFilterButton(todos, filterState);
 
-    updateLocalStorageData(searchedValue);
+    updateLocalStorageData();
 
     paginatedTodos.forEach((todo) => {
         $todoList.appendChild(createTodoElement(todo));
@@ -422,6 +428,7 @@ const getLocalStorageData = () => {
 
     if (state?.searchedValue.length) {
         toggleSearchBar();
+        getSearchedValue()
     }
     if (isTaskInputVisible) {
         showInputWrapper();
@@ -434,7 +441,7 @@ const getLocalStorageData = () => {
 getLocalStorageData();
 
 $addButton.addEventListener("click", addTodoHandler);
-$searchInput.addEventListener("input", () => renderTodos());
+$searchInput.addEventListener("input", () => searchHandler());
 $allTodoButton.addEventListener("click", () => setFilter("all"));
 $incompleteTodoButton.addEventListener("click", () => setFilter("incomplete"));
 $completeTodoButton.addEventListener("click", () => setFilter("complete"));
